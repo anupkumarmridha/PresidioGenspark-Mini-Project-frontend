@@ -21,7 +21,7 @@
   /*========== Font and typography ==========*/
   /* .5rem = 8px | 1rem = 16px ... */
   --body-font: 'Lato', sans-serif;
-  --second-font: 'League Spartan', sans-serif;
+  --second-font: 'Spartan', sans-serif;
   --big-font-size: 3.5rem;
   --h1-font-size: 2.75rem;
   --h2-font-size: 2rem;
@@ -114,6 +114,15 @@ input{
   max-width: 1320px;
   margin-inline: auto;
   padding-inline: 0.75rem;
+}
+
+.grid{
+  display: grid;
+  gap: 1.5rem;
+}
+
+.section__lg{
+  padding-block: 4rem;
 }
 
 .form__input{
@@ -240,8 +249,57 @@ margin-left: 2.5rem;
 
 
 /*=============== HOME ===============*/
+.home__container{
+ grid-template-columns: 5fr 7fr;
+ align-items: center;
+}
+.home__subtitle,
+.home__description{
+  font-size: var(--large-font-size);
+}
+
+.home__subtitle{
+ font-family: var(--second-font);
+ font-weight: var(--weight-600);
+ margin-bottom: 1rem;
+ display: block;
+}
+.home__title{
+  font-size: var(--h1-font-size);
+  font-weight: var(--weight-700);
+  line-height: 1.4;
+}
+
+.home__title span{
+  color: var(--first-color);
+  font-size: var(--big-font-size);
+}
+
+.home__description{
+margin-block: 0.5rem 2rem;
+}
+
+.home__img{
+  justify-self: flex-end;
+}
 
 /*=============== BUTTONS ===============*/
+
+.btn{
+  display: inline-block;
+  background-color: var(--first-color);
+  border: 2px solid var(--first-color);
+  color: var(--body-color);
+  padding: 0.5rem 1rem;
+  font-family: var(--second-font);
+  font-weight: var(--weight-700);
+  transition: all 0.4s var(--transition);
+}
+
+.btn:hover{
+  background-color: var(--body-color);
+  color: var(--first-color);
+}
 
 /*=============== CATEGORIES ===============*/
 
