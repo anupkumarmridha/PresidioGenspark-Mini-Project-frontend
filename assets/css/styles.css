@@ -121,8 +121,21 @@ input{
   gap: 1.5rem;
 }
 
+.section{
+  padding-block: 2rem;
+}
+
 .section__lg{
   padding-block: 4rem;
+}
+
+.section__title{
+  font-size: var(--h4-font-size);
+  margin-bottom: 1.5rem;
+}
+
+.section__title span{
+  color: var(--first-color);
 }
 
 .form__input{
@@ -302,8 +315,54 @@ margin-block: 0.5rem 2rem;
 }
 
 /*=============== CATEGORIES ===============*/
+.categories{
+overflow: hidden;
+}
+.category__item{
+  text-align: center;
+  border: 1px solid var(--border-color);
+  padding: 0.625rem 1.25rem;
+  border-radius: 1.25rem;
+}
+
+.category__item img{
+  border-radius: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.category__title{
+  font-size: var(--small-font-size);
+color: var(--text-color);
+}
+
 
 /* Swiper class */
+.swiper{
+  overflow: initial;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after{
+  content: '';
+}
+
+.swiper-button-next,
+.swiper-button-prev{
+top: -1.875rem;
+background-color: var(--first-color-alt);
+border: 1px solid var(--border-color);
+width: 30px;
+height: 30px;
+border-radius: 50%;
+color: var(--first-color);
+font-size: var(--tiny-font-size);
+}
+.swiper-button-prev{
+  left: initial;
+  right: 2.5rem;
+}
+.swiper-button-next{
+  right: 0;
+}
 
 /*=============== PRODUCTS ===============*/
 
