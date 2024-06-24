@@ -365,8 +365,28 @@ font-size: var(--tiny-font-size);
 }
 
 /*=============== PRODUCTS ===============*/
+.tab__btns{
+  display: flex;
+  column-gap: 0.75rem;
+}
+
+.tab__btn{
+  background-color: var(--container-color);
+  color: var(--title-color);
+  padding: 1rem 1.25rem 0.875rem;
+  border-radius: 0.25rem;
+  font-family: var(--second-font);
+  font-size: var(--small-font-size);
+  font-weight: var(--weight-600);
+  cursor: pointer;
+}
+
 
 /* Active Tab */
+.tab__btn.active-tab{
+  color: var(--first-color);
+  background-color: var(--second-color);
+}
 
 /* Product Hover */
 
