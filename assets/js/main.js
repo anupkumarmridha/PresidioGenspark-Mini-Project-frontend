@@ -207,4 +207,63 @@ $(document).ready(function () {
 
   fetchProducts('https://dummyjson.com/products');
   fetchCategories();
+
+  // Auth Related
+  // Function to check if user is authenticated
+function isAuthenticated() {
+  return !!localStorage.getItem('userToken');
+}
+
+function updateUI() {
+  const authSection = document.getElementById('authSection');
+  const logoutBtnContainer = document.getElementById('logoutBtnContainer');
+
+  if (isAuthenticated()) {
+    // User is authenticated, show logout button
+    authSection.innerHTML = `
+      <ul class="login-btns">
+        <li class="login-btns-items" id="logoutBtnContainer">
+          <button type="button" class="btn btn-danger" id="logoutBtn">
+            Logout
+          </button>
+        </li>
+      </ul>
+    `;
+    logoutBtnContainer.style.display = 'inline-block';
+  } else {
+    // User is not authenticated, show login/signup buttons
+    authSection.innerHTML = `
+      <ul class="login-btns">
+        <li class="login-btns-items">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Login
+          </button>
+        </li>
+        <li class="login-btns-items">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#signupModal">
+            Sign up
+          </button>
+        </li>
+      </ul>
+    `;
+    logoutBtnContainer.style.display = 'none';
+  }
+}
+
+// Function to handle logout
+function logout() {
+  localStorage.removeItem('userToken'); // Clear user token (or any other auth data)
+  updateUI(); // Update UI after logout
+}
+
+// Event listener for logout button click
+document.addEventListener('click', function(event) {
+  if (event.target && event.target.id === 'logoutBtn') {
+    logout();
+  }
+});
+
+// Initial UI update
+updateUI();
+
 });

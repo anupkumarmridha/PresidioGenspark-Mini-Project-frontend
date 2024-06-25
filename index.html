@@ -54,25 +54,29 @@
             <option value="low">Below 3.5</option>
           </select>
         </div>
-        <div class="auth">
+        <div class="auth" id="authSection">
           <ul class="login-btns">
+            <!-- Logged In State -->
+            <li class="login-btns-items" id="logoutBtnContainer" style="display: none;">
+              <button type="button" class="btn btn-danger" id="logoutBtn">
+                Logout
+              </button>
+            </li>
+            <!-- Logged Out State -->
             <li class="login-btns-items">
-              <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#loginModal">
+              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">
                 Login
               </button>
             </li>
-            <!-- Button to trigger singup modal -->
+            <!-- Button to trigger signup modal -->
             <li class="login-btns-items">
-              <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#signupModal">
+              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#signupModal">
                 Sign up
               </button>
             </li>
-            
           </ul>
-          <!-- <button class="btn" id="cart-btn">Cart</button> -->
         </div>
       </div>
-
     </header>
     <main>
       <div class="product-list" id="product-list">
@@ -92,7 +96,6 @@
 
 <!-- ==================Modals======================== -->
 <!-- =================Register Modal================ -->
-
 <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -101,42 +104,31 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <form action='' method='post'>
-              <div class="form-group">
-                <label for="username">Username:</label>
-                  <input type="text" class="form-control" id="username" name="username" placeholder="Username Should be Unique">
-                </div>
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control" id="email" for="email" name="email" placeholder="Enter your Email">
-                </div>
-              <div class="form-group">
-                  <label for="fname">First Name</label>
-                  <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name"
-                      autocomplete="fname" required>
+          <form id="signupForm">
+              <div class="form-group mb-3">
+                  <label for="name">Full Name:</label>
+                  <input type="text" class="form-control" id="username" name="name" placeholder="Username Should be Unique" required>
+                  <span class="text-danger" id="usernameError"></span>
               </div>
-
-              <div class="form-group">
-                  <label for="lname">Last Name</label>
-                  <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name"
-                      autocomplete="lname" required>
+              <div class="form-group mb-3">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your Email" required>
+                  <span class="text-danger" id="emailError"></span>
               </div>
-              <div class="form-group">
-                  <label for="phone_number">Phone</label>
-                  <input type="text" class="form-control"  id="phone_number" name="phone_number" placeholder="Phone Number with country code (eg: +91)"
-                      autocomplete="lname" required>
+              <div class="form-group mb-3">
+                  <label for="phone">Phone:</label>
+                  <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number with country code (eg: +91)" required>
+                  <span class="text-danger" id="phoneError"></span>
               </div>
-
-              <div class="form-group">
-                  <label for="pass1">Choose Password</label>
-                  <input type="password" class="form-control" id="pass1" name="pass1"
-                      placeholder="Enter your password" autocomplete="pass1" required>
+              <div class="form-group mb-3">
+                  <label for="password">Choose Password:</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                  <span class="text-danger" id="passwordError"></span>
               </div>
-
-              <div class="form-group">
-                  <label for="pass2">Confirm Password</label>
-                  <input type="password" class="form-control" id="pass2" name="pass2"
-                      placeholder="Enter your password again" autocomplete="pass2" required>
+              <div class="form-group mb-3">
+                  <label for="confirmPassword">Confirm Password:</label>
+                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Enter your password again" required>
+                  <span class="text-danger" id="confirmPasswordError"></span>
               </div>
               <button type="submit" class="btn btn-primary">Sign Up</button>
           </form>
@@ -156,33 +148,209 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <form action='' method='post'>
-              <div class="form-group">
-                  <label for="username">Email</label>
-                  <input type="text" class="form-control" id="loginusername" name="loginusername"
-                      placeholder="Enter your email" autocomplete="loginusername" required>
-              </div>
-
-              <div class="form-group">
-                  <label for="pass">Password</label>
-                  <input type="password" class="form-control" id="loginpassword" name="loginpassword"
-                      placeholder="Enter your password " autocomplete="loginpassword" required>
-              </div>
-              <ul class="list-group">
-                  <li class="list-group-item">
-                      <a class="login-links" href= "">Forgot Password?</a>
-                  </li>
-                  <li class="list-group-item">
-                      <a class="login-links" href="" data-toggle="modal" data-target="#singupModal">Don't Have an Account?</a>
-                  </li>
-                  <li class="list-group-item">
-                      <button type="submit" class="btn btn-primary">Log in</button>
-                  </li>                       
-              </ul>
-          </form>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginemail">Email</label>
+            <input type="email" class="form-control" id="loginemail" name="email" placeholder="Enter your email" autocomplete="email" required>
+          </div>
+          <div class="form-group">
+            <label for="loginpassword">Password</label>
+            <input type="password" class="form-control" id="loginpassword" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <a class="login-links" href="">Forgot Password?</a>
+            </li>
+            <li class="list-group-item">
+              <a class="login-links" href="" data-bs-toggle="modal" data-bs-target="#signupModal">Don't Have an Account?</a>
+            </li>
+            <li class="list-group-item">
+              <button type="submit" class="btn btn-primary">Log in</button>
+            </li>
+          </ul>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
+
+<script>
+
+  // Signup form submission
+  document.getElementById('signupForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+  
+    // Clear previous errors
+    clearErrors();
+  
+    // Validate form
+    let isValid = true;
+    if (!validateField('name')) isValid = false;
+    if (!validateField('email', validateEmail)) isValid = false;
+    if (!validateField('phone')) isValid = false;
+    if (!validateField('password')) isValid = false;
+    if (!validatePasswordMatch()) isValid = false;
+  
+    if (isValid) {
+      const formData = new FormData(this);
+      fetch('http://localhost:5062/api/User/CustomerRegister', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(data => {
+            throw new Error(data.errorMessage || 'Bad Request');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const { role, token } = data;
+  
+        // Store role and token in localStorage
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userToken', token);
+        showToast('Registration successful', 'success');
+        window.location.href = '/index.html'; // Example: Redirect to home page
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        const errorMessage = error.message || "Something went wrong. Please try again later.";
+        showToast(errorMessage, "error");
+        });
+    }
+  });
+
+  // Function to handle login form submission
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+  
+    // Clear previous errors
+    clearErrors();
+  
+    // Validate form
+    let isValid = true;
+    if (!validateField('loginemail', validateEmail)) isValid = false;
+    if (!validateField('loginpassword')) isValid = false;
+  
+    if (isValid) {
+      const formData = new FormData(this);
+      fetch('http://localhost:5062/api/User/CustomerLogin', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(data => {
+            throw new Error(data.errorMessage || 'Login failed');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const { role, token } = data;
+  
+        // Store role and token in localStorage
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userToken', token);
+  
+        // Optionally, you can redirect the user or update UI after successful login
+        console.log('Login successful:', data);
+        showToast('Login successful', 'success');
+        window.location.href = '/index.html'; // Example: Redirect to home page
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        const errorMessage = error.message || "Something went wrong. Please try again later.";
+        showToast(errorMessage, "error");
+      });
+    }
+  });
+  
+  
+  const showToast = (message, status) => {
+    const toast = document.getElementById("toast");
+    toast.className = "toast show";
+  
+    // Determine background color based on status
+    let backgroundColor;
+    switch (status) {
+      case "success":
+        backgroundColor = "rgb(4, 100, 4)";
+        break;
+      case "error":
+        backgroundColor = "rgb(186, 93, 93)";
+        break;
+      default:
+        backgroundColor = "rgb(4, 100, 4)"; // Default to success color
+        break;
+    }
+  
+    toast.style.backgroundColor = backgroundColor;
+    toast.innerHTML = `<span class="close">&times;</span> ${message}`;
+  
+    setTimeout(function () {
+      toast.className = toast.className.replace("show", "");
+    }, 3000);
+  
+    const closeButton = document.querySelector('.toast .close');
+    closeButton.onclick = function () {
+      toast.style.visibility = 'hidden';
+    };
+  };
+
+
+  function validateField(id, customValidation) {
+    const field = document.getElementById(id);
+    const errorSpan = document.getElementById(id + 'Error');
+    if (!field.value || (customValidation && !customValidation(field.value))) {
+      field.classList.add('is-invalid');
+      errorSpan.textContent = 'This field is required or invalid';
+      return false;
+    } else {
+      field.classList.remove('is-invalid');
+      field.classList.add('is-valid');
+      errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const errorSpan = document.getElementById('confirmPasswordError');
+    if (password !== confirmPassword) {
+      document.getElementById('confirmPassword').classList.add('is-invalid');
+      errorSpan.textContent = 'Passwords do not match';
+      return false;
+    } else {
+      document.getElementById('confirmPassword').classList.remove('is-invalid');
+      document.getElementById('confirmPassword').classList.add('is-valid');
+      errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  function clearErrors() {
+    const errorSpans = document.querySelectorAll('span.text-danger');
+    errorSpans.forEach(span => span.textContent = '');
+    const invalidFields = document.querySelectorAll('.is-invalid');
+    invalidFields.forEach(field => field.classList.remove('is-invalid'));
+    const validFields = document.querySelectorAll('.is-valid');
+    validFields.forEach(field => field.classList.remove('is-valid'));
+  }
+</script>
 </html>
