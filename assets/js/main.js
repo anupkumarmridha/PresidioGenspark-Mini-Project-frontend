@@ -1,12 +1,14 @@
 $(document).ready(function () {
   const productList = $('#product-list');
+  const pagination = $('#pagination');
   const searchBar = $('#search-bar');
   const categoryFilter = $('#category-filter');
   const ratingFilter = $('#rating-filter');
 
   let products = [];
+  const productsPerPage = 6;
+  let currentPage = 1;
 
-  
   const fetchTemplate = async (url) => {
       try {
           const response = await fetch(url);
@@ -16,32 +18,31 @@ $(document).ready(function () {
           return '';
       }
   };
-  
-  const fetchProducts = (url, callback) => {
-      $.ajax({
-          url: url,
-          method: 'GET',
-          success: function (data) {
-              products = data.products;
-              callback(products);
-          },
-          error: function (error) {
-              console.error('Error fetching products:', error);
-          }
-      });
+
+  const fetchProducts = async (url) => {
+      try {
+          const response = await $.ajax({
+              url: url,
+              method: 'GET',
+          });
+          products = response.products;
+          displayProducts(products);
+          setupPagination(products);
+      } catch (error) {
+          console.error('Error fetching products:', error);
+      }
   };
 
-  const fetchCategories = () => {
-      $.ajax({
-          url: 'https://dummyjson.com/products/categories',
-          method: 'GET',
-          success: function (data) {
-              populateCategories(data);
-          },
-          error: function (error) {
-              console.error('Error fetching categories:', error);
-          }
-      });
+  const fetchCategories = async () => {
+      try {
+          const response = await $.ajax({
+              url: 'https://dummyjson.com/products/categories',
+              method: 'GET',
+          });
+          populateCategories(response);
+      } catch (error) {
+          console.error('Error fetching categories:', error);
+      }
   };
 
   const populateCategories = (categories) => {
@@ -51,10 +52,14 @@ $(document).ready(function () {
       });
   };
 
-   const displayProducts = async (productArray) => {
+  const displayProducts = async (productArray) => {
       const template = await fetchTemplate('Product/ProductCard.html');
       productList.empty();
-      productArray.forEach(product => {
+      const start = (currentPage - 1) * productsPerPage;
+      const end = start + productsPerPage;
+      const paginatedProducts = productArray.slice(start, end);
+
+      paginatedProducts.forEach(product => {
           const productCard = template
               .replace(/{thumbnail}/g, product.thumbnail || 'default.jpg')
               .replace(/{title}/g, product.title)
@@ -78,10 +83,32 @@ $(document).ready(function () {
           productList.append(productCard);
       });
 
-      $('.btn').on('click', function () {
-          const productId = $(this).data('product-id');
-          addToCart(productId, 1); // Assuming quantity is 1 for now
+      $('.add-to-cart-btn').on('click', function () {
+        const productId = $(this).data('product-id');
+        let quantity=document.getElementById(`quantity-${productId}`).value;
+        console.log(quantity);
+          addToCart(productId, quantity);
       });
+  };
+
+  const setupPagination = (productArray) => {
+      pagination.empty();
+      const totalPages = Math.ceil(productArray.length / productsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+          const button = $(`<button>${i}</button>`);
+          if (i === currentPage) {
+              button.addClass('active');
+          }
+
+          button.on('click', async () => {
+              currentPage = i;
+              await displayProducts(products);
+              setupPagination(products);
+          });
+
+          pagination.append(button);
+      }
   };
 
   const calculateOriginalPrice = (price, discountPercentage) => {
@@ -99,19 +126,21 @@ $(document).ready(function () {
       return (totalRating / reviews.length).toFixed(2);
   };
 
-  const filterProducts = () => {
+  const filterProducts = async () => {
       const searchQuery = searchBar.val().toLowerCase();
       const selectedCategory = categoryFilter.val();
       const selectedRating = ratingFilter.val();
 
-      if (selectedCategory === 'all') {
-          fetchProducts('https://dummyjson.com/products', () => applyFiltersAndSort(searchQuery, selectedRating));
-      } else {
-          fetchProducts(`https://dummyjson.com/products/category/${selectedCategory}`, () => applyFiltersAndSort(searchQuery, selectedRating));
+      let url = 'https://dummyjson.com/products';
+      if (selectedCategory !== 'all') {
+          url = `https://dummyjson.com/products/category/${selectedCategory}`;
       }
+      
+      await fetchProducts(url);
+      applyFiltersAndSort(searchQuery, selectedRating);
   };
 
-  const applyFiltersAndSort = (searchQuery, selectedRating) => {
+  const applyFiltersAndSort = async (searchQuery, selectedRating) => {
       let filteredProducts = products.filter(product => {
           const matchesSearch = product.title.toLowerCase().includes(searchQuery) || product.description.toLowerCase().includes(searchQuery);
           let matchesRating = true;
@@ -129,8 +158,9 @@ $(document).ready(function () {
       // Sort products by rating in descending order
       filteredProducts.sort((a, b) => b.rating - a.rating);
 
-      displayProducts(filteredProducts);
+      await displayProducts(filteredProducts);
   };
+
   const showToast = (message) => {
       const toast = document.getElementById("toast");
       toast.className = "toast show";
@@ -145,37 +175,36 @@ $(document).ready(function () {
           toast.style.visibility = 'hidden';
       };
   };
-  const addToCart = (productId, quantity) => {
-      fetch('https://dummyjson.com/carts/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              userId: 1,
-              products: [
-                  {
-                      id: productId,
-                      quantity: quantity,
-                  }
-              ]
-          })
-      })
-      .then(res => res.json())
-      .then(data => {
+
+  const addToCart = async (productId, quantity) => {
+      try {
+          const response = await fetch('https://dummyjson.com/carts/add', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  userId: 1,
+                  products: [
+                      {
+                          id: productId,
+                          quantity: quantity,
+                      }
+                  ]
+              })
+          });
+
+          const data = await response.json();
           console.log('Product added to cart:', data);
           showToast("Product added to cart");
-      })
-      .catch(error => {
+      } catch (error) {
           console.error('Error adding to cart:', error);
           alert('Failed to add product to cart');
-      });
+      }
   };
 
-  
   searchBar.on('input', filterProducts);
   categoryFilter.on('change', filterProducts);
   ratingFilter.on('change', filterProducts);
 
-  fetchProducts('https://dummyjson.com/products', displayProducts);
+  fetchProducts('https://dummyjson.com/products');
   fetchCategories();
 });
-
