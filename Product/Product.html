@@ -24,7 +24,7 @@
     <script src="../assets/js/product.js"></script>
 </head>
 <body>
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#productModal">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal">
         Add Product
       </button>
     <!-- ==================Add Product Modal======================= -->
@@ -38,23 +38,24 @@
                 <div class="modal-body">
                     <div class="form">
                         <form id="productForm" enctype="multipart/form-data">
-                            <label for="productName">Product Name: <span id="nameError"></span></label>
-                            <input type="text" id="productName" name="productName">
+                            <label for="productName">Product Name: <span id="productNameError"></span></label>
+                            <input type="text" class="form-control" id="productName" onblur="validateField('productName')" name="productName">
                             <br><br>
-                            <label for="productDescription">Description: <span id="descriptionError"></span></label>
-                            <textarea id="productDescription" name="productDescription"></textarea>
+                            <label for="productDescription">Description: <span id="productDescriptionError"></span></label>
+                            <textarea id="productDescription" onblur="validateField('productDescription')" class="form-control"  name="productDescription"></textarea>
                             <br><br>
-                            <label for="productCategory">Category: <span id="categoryError"></span></label>
-                            <input type="text" id="productCategory" name="productCategory">
+                            <label for="productCategory">Category: <span id="productCategoryError"></span></label>
+                            <input type="text" class="form-control" id="productCategory" onblur="validateField('productCategory')" name="productCategory">
                             <br><br>
-                            <label for="productPrice">Price: <span id="priceError"></span></label>
-                            <input type="number" id="productPrice" name="productPrice">
+                            <label for="productPrice">Price: <span id="productPriceError"></span></label>
+                            <input type="number" class="form-control"  id="productPrice" onblur="validateField('productPrice')" name="productPrice">
                             <br><br>
-                            <label for="productQuantity">Quantity: <span id="quantityError"></span></label>
-                            <input type="number" id="productQuantity" name="productQuantity">
+                            <label for="productQuantity">Quantity: <span id="productQuantityError"></span></label>
+                            <input type="number" class="form-control"  id="productQuantity" onblur="validateField('productQuantity')"name="productQuantity">
                             <br><br>
-                            <label for="productImage">Image: <span id="imageError"></span></label>
-                            <input type="file" id="productImage" name="productImage">
+                            <label for="productImage">Image: <span id="productImageError"></span></label>
+                            <input type="file" class="form-control" id="productImage" onblur="validateField('productImage')" name="productImage">
+                            
                             <br><br>
                             <button type="submit" class="btn btn-success">Add Product</button>
                         </form>
@@ -63,7 +64,6 @@
             </div>
         </div>
     </div>
-
     <h1>Product List</h1>
     <table id="productTable" class="table table-striped">
         <thead>
@@ -75,11 +75,18 @@
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Image</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination" id="pagination">
+        </ul>
+    </nav>
 
     <!-- Toast message container -->
     <div id="toast" class="toast" style="position: fixed; bottom: 10px; right: 10px;"></div>
@@ -89,6 +96,9 @@
 
 <script>
     const baseUrl = 'http://localhost:5062/api';
+    const productsPerPage = 5;
+    let currentPage = 1;
+    let products = [];
 
     document.getElementById('productForm').addEventListener('submit', handleProductFormSubmit);
 
@@ -104,22 +114,23 @@
 
         try {
             const responseData = await submitProductForm(formData);
-            addProductToTable(responseData);
+            products.push(responseData);
+            renderTable();
             resetForm();
             showToast('Product added successfully', 'success');
         } catch (error) {
             showToast(error.message, 'error');
         }
     }
-
     function clearErrorMessages() {
-        document.getElementById('nameError').textContent = '';
-        document.getElementById('descriptionError').textContent = '';
-        document.getElementById('categoryError').textContent = '';
-        document.getElementById('priceError').textContent = '';
-        document.getElementById('quantityError').textContent = '';
-        document.getElementById('imageError').textContent = '';
+        document.getElementById('productNameError').textContent = '';
+        document.getElementById('productDescriptionError').textContent = '';
+        document.getElementById('productCategoryError').textContent = '';
+        document.getElementById('productPriceError').textContent = '';
+        document.getElementById('productQuantityError').textContent = '';
+        document.getElementById('productImageError').textContent = '';
     }
+
 
     function getFormData() {
         const formData = new FormData();
@@ -137,37 +148,52 @@
 
         if (!data.get('name')) {
             isValid = false;
-            document.getElementById('nameError').textContent = 'Product name is required';
+            document.getElementById('productNameError').textContent = 'Product name is required';
         }
         if (!data.get('description')) {
             isValid = false;
-            document.getElementById('descriptionError').textContent = 'Description is required';
+            document.getElementById('productDescriptionError').textContent = 'Description is required';
         }
         if (!data.get('categoryName')) {
             isValid = false;
-            document.getElementById('categoryError').textContent = 'Category is required';
+            document.getElementById('productCategoryError').textContent = 'Category is required';
         }
         if (!data.get('price')) {
             isValid = false;
-            document.getElementById('priceError').textContent = 'Price is required';
+            document.getElementById('productPriceError').textContent = 'Price is required';
         } else if (data.get('price') <= 0) {
             isValid = false;
-            document.getElementById('priceError').textContent = 'Price must be greater than 0';
+            document.getElementById('productPriceError').textContent = 'Price must be greater than 0';
         }
         if (!data.get('quantity')) {
             isValid = false;
-            document.getElementById('quantityError').textContent = 'Quantity is required';
+            document.getElementById('productQuantityError').textContent = 'Quantity is required';
         } else if (data.get('quantity') <= 0) {
             isValid = false;
-            document.getElementById('quantityError').textContent = 'Quantity must be greater than 0';
+            document.getElementById('productQuantityError').textContent = 'Quantity must be greater than 0';
         }
         if (!data.get('image')) {
             isValid = false;
-            document.getElementById('imageError').textContent = 'Image is required';
+            document.getElementById('productImageError').textContent = 'Image is required';
         }
 
         return isValid;
     }
+
+    function validateField(id, customValidation) {
+        const field = document.getElementById(id);
+        const errorSpan = document.getElementById(id + 'Error');
+        if (!field.value || (customValidation && !customValidation(field.value))) {
+          field.classList.add('is-invalid');
+          errorSpan.textContent = 'This field is required or invalid';
+          return false;
+        } else {
+          field.classList.remove('is-invalid');
+          field.classList.add('is-valid');
+          errorSpan.textContent = '';
+          return true;
+        }
+      }
 
     async function submitProductForm(formData) {
         const response = await fetch(`${baseUrl}/Product`, {
@@ -184,13 +210,13 @@
     }
 
     function addProductToTable(product) {
-        //console.log(product);
-        const { id, name, description, category, quantity, price, imageUrl } = product;
+        const { productId, name, description, categoryName, quantity, price } = product;
+        const imageUrl = product.imageUrl || '../assets/img/product-8-1.jpg';
 
         const newRow = document.createElement('tr');
 
         const idCell = document.createElement('td');
-        idCell.textContent = id;
+        idCell.textContent = productId;
         newRow.appendChild(idCell);
 
         const nameCell = document.createElement('td');
@@ -202,7 +228,7 @@
         newRow.appendChild(descriptionCell);
 
         const categoryCell = document.createElement('td');
-        categoryCell.textContent = category.name;
+        categoryCell.textContent = categoryName;
         newRow.appendChild(categoryCell);
 
         const quantityCell = document.createElement('td');
@@ -222,7 +248,77 @@
         imageCell.appendChild(image);
         newRow.appendChild(imageCell);
 
+        const actionCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'btn btn-primary btn-sm me-2';
+        editButton.addEventListener('click', () => editProduct(productId));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'btn btn-danger btn-sm';
+        deleteButton.addEventListener('click', () => deleteProduct(productId));
+
+        actionCell.appendChild(editButton);
+        actionCell.appendChild(deleteButton);
+        newRow.appendChild(actionCell);
+
         document.querySelector('#productTable tbody').appendChild(newRow);
+    }
+
+    async function editProduct(productId) {
+        // Add your logic to edit the product
+        showToast(`Edit functionality for product ID ${productId} is not implemented`, 'info');
+    }
+
+    async function deleteProduct(productId) {
+        try {
+            const response = await fetch(`${baseUrl}/Product/${productId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete product');
+            }
+            products = products.filter(product => product.productId !== productId);
+            renderTable();
+            showToast('Product deleted successfully', 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    }
+
+    function renderTable() {
+        const tbody = document.querySelector('#productTable tbody');
+        tbody.innerHTML = '';
+
+        const start = (currentPage - 1) * productsPerPage;
+        const end = start + productsPerPage;
+        const paginatedProducts = products.slice(start, end);
+
+        paginatedProducts.forEach(addProductToTable);
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(products.length / productsPerPage);
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = document.createElement('li');
+            pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+            const pageLink = document.createElement('a');
+            pageLink.className = 'page-link';
+            pageLink.textContent = i;
+            pageLink.addEventListener('click', () => goToPage(i));
+            pageItem.appendChild(pageLink);
+            pagination.appendChild(pageItem);
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        renderTable();
     }
 
     function resetForm() {
@@ -230,7 +326,7 @@
     }
 
     function showToast(message, status) {
-        const toast = document.getElementById("toast");
+        const toast = document.getElementById('toast');
         toast.className = `toast show ${status}`;
         toast.textContent = message;
         setTimeout(function() {
@@ -251,8 +347,8 @@
             if (!response.ok) {
                 throw new Error('Failed to fetch products');
             }
-            const products = await response.json();
-            products.forEach(addProductToTable);
+            products = await response.json();
+            renderTable();
         } catch (error) {
             showToast(error.message, 'error');
         }
