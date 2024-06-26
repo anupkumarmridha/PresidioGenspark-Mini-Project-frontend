@@ -1,0 +1,118 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+h1 {
+    text-align: center;
+}
+.form {
+    margin: 0 auto;
+    width: 100%;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    padding: 10px 45px 25px 15px;
+}
+input:focus{
+    outline: none;
+    border: 2px solid yellowgreen;
+}
+textarea:focus{
+    outline: none;
+    border: 2px solid yellowgreen;
+}
+.form textarea {
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+}
+.form input {
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+}
+.form label {
+    display: block;
+}
+.form span {
+    color: red;
+    font-size: 0.8em;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+.form button {
+    padding: 10px;
+    background-color: yellowgreen;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: block;
+    margin:0 auto;
+    transition: transform 0.5s ease;
+}
+.form button:hover {
+    transform: scale(1.1);
+    background-color: green;
+    border: 2px solid yellowgreen;
+}
+/* Toast Styles */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: rgb(4, 100, 4);
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 30px;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+.toast.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.toast .close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: rgb(186, 93, 93);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
