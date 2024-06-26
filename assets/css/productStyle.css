@@ -67,6 +67,36 @@ th {
     background-color: green;
     border: 2px solid yellowgreen;
 }
+
+
+.page-link {
+    cursor: pointer;
+    padding: 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+    border: 1px solid #007bff;
+    color: #007bff;
+    background-color: #fff;
+    text-decoration: none;
+}
+
+.page-link:hover {
+    background-color: #e9ecef;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.page-item .page-link:focus, .page-item .page-link:active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+
 /* Toast Styles */
 .toast {
     visibility: hidden;

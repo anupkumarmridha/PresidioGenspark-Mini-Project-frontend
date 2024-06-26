@@ -210,7 +210,7 @@
     }
 
     function addProductToTable(product) {
-        const { productId, name, description, categoryName, quantity, price } = product;
+        const { productId, name, description, category, quantity, price } = product;
         const imageUrl = product.imageUrl || '../assets/img/product-8-1.jpg';
 
         const newRow = document.createElement('tr');
@@ -228,7 +228,7 @@
         newRow.appendChild(descriptionCell);
 
         const categoryCell = document.createElement('td');
-        categoryCell.textContent = categoryName;
+        categoryCell.textContent = category.name;
         newRow.appendChild(categoryCell);
 
         const quantityCell = document.createElement('td');
@@ -303,19 +303,33 @@
         const totalPages = Math.ceil(products.length / productsPerPage);
         const pagination = document.getElementById('pagination');
         pagination.innerHTML = '';
-
+    
         for (let i = 1; i <= totalPages; i++) {
             const pageItem = document.createElement('li');
             pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+    
             const pageLink = document.createElement('a');
             pageLink.className = 'page-link';
             pageLink.textContent = i;
+            pageLink.style.cursor = 'pointer';
+            pageLink.style.padding = '10px';
+            pageLink.style.margin = '0 5px';
+            pageLink.style.borderRadius = '5px';
+            pageLink.style.border = '1px solid #007bff';
+            pageLink.style.color = '#007bff';
+            pageLink.style.backgroundColor = '#fff';
             pageLink.addEventListener('click', () => goToPage(i));
+    
+            if (i === currentPage) {
+                pageLink.style.backgroundColor = '#007bff';
+                pageLink.style.color = '#fff';
+            }
+    
             pageItem.appendChild(pageLink);
             pagination.appendChild(pageItem);
         }
     }
-
+    
     function goToPage(page) {
         currentPage = page;
         renderTable();
