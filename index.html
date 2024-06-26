@@ -152,10 +152,12 @@
           <div class="form-group">
             <label for="loginemail">Email</label>
             <input type="email" class="form-control" id="loginemail" name="email" placeholder="Enter your email" autocomplete="email" required>
+            <span class="text-danger" id="loginemailError"></span>
           </div>
           <div class="form-group">
             <label for="loginpassword">Password</label>
             <input type="password" class="form-control" id="loginpassword" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <span class="text-danger" id="loginpasswordError"></span>
           </div>
           <ul class="list-group">
             <li class="list-group-item">
@@ -176,6 +178,7 @@
 
 
 <script>
+  var baseUrl = 'http://localhost:5062/api/User';
 
   // Signup form submission
   document.getElementById('signupForm').addEventListener('submit', function(event) {
@@ -194,7 +197,7 @@
   
     if (isValid) {
       const formData = new FormData(this);
-      fetch('http://localhost:5062/api/User/CustomerRegister', {
+      fetch(`${baseUrl}/CustomerRegister`, {
         method: 'POST',
         body: JSON.stringify(Object.fromEntries(formData)),
         headers: {
@@ -229,7 +232,7 @@
   // Function to handle login form submission
   document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
-  
+
     // Clear previous errors
     clearErrors();
   
@@ -240,7 +243,7 @@
   
     if (isValid) {
       const formData = new FormData(this);
-      fetch('http://localhost:5062/api/User/CustomerLogin', {
+      fetch(`${baseUrl}/CustomerLogin`, {
         method: 'POST',
         body: JSON.stringify(Object.fromEntries(formData)),
         headers: {
@@ -310,6 +313,7 @@
 
   function validateField(id, customValidation) {
     const field = document.getElementById(id);
+    console.log('Element with ID "loginemail":', field);
     const errorSpan = document.getElementById(id + 'Error');
     if (!field.value || (customValidation && !customValidation(field.value))) {
       field.classList.add('is-invalid');
