@@ -130,6 +130,15 @@
                   <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Enter your password again" onblur="validatePasswordMatch()" required>
                   <span class="text-danger" id="confirmPasswordError"></span>
               </div>
+
+              <div class="form-group mb-3">
+                <label for="role">Role:</label>
+                <select class="form-control" id="role" name="role" required>
+                    <option value="Customer">Customer</option>
+                    <option value="Seller">Seller</option>
+                </select>
+            </div>
+
               <button type="submit" class="btn btn-primary">Sign Up</button>
           </form>
       </div>
@@ -158,6 +167,13 @@
             <label for="loginpassword">Password</label>
             <input type="password" class="form-control" id="loginpassword" name="password" onblur="validateField('loginpassword')" placeholder="Enter your password" autocomplete="current-password" required>
             <span class="text-danger" id="loginpasswordError"></span>
+          </div>
+          <div class="form-group mb-3">
+            <label for="loginRole">Role:</label>
+            <select class="form-control" id="loginRole" name="role" required>
+                <option value="Customer">Customer</option>
+                <option value="Seller">Seller</option>
+            </select>
           </div>
           <ul class="list-group">
             <li class="list-group-item">
@@ -195,10 +211,14 @@
     if (!validateField('phone')) isValid = false;
     if (!validateField('password')) isValid = false;
     if (!validatePasswordMatch()) isValid = false;
-  
+    
+    const role = document.getElementById('role').value;
     if (isValid) {
       const formData = new FormData(this);
-      fetch(`${baseUrl}/CustomerRegister`, {
+      const customerRegisterURL = `${baseUrl}/CustomerRegister`;
+      const sellerRegisterURL = `${baseUrl}/SellerRegister`;
+      const url = role === 'Customer' ? customerRegisterURL : sellerRegisterURL;
+      fetch(url, {
         method: 'POST',
         body: JSON.stringify(Object.fromEntries(formData)),
         headers: {
@@ -241,10 +261,15 @@
     let isValid = true;
     if (!validateField('loginemail', validateEmail)) isValid = false;
     if (!validateField('loginpassword')) isValid = false;
-  
+    const role = document.getElementById('loginRole').value;
     if (isValid) {
+
       const formData = new FormData(this);
-      fetch(`${baseUrl}/CustomerLogin`, {
+      const CustomerLoginUrl=`${baseUrl}/CustomerLogin`;
+      const SellerLoginUrl=`${baseUrl}/SellerLogin`;
+      console.log(role);
+      const url = role === 'Customer' ? CustomerLoginUrl : SellerLoginUrl;
+      fetch(url, {
         method: 'POST',
         body: JSON.stringify(Object.fromEntries(formData)),
         headers: {
