@@ -19,6 +19,10 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script
+      src="https://kit.fontawesome.com/0e1f7b1c4e.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <!--=============== CSS ===============-->
@@ -34,10 +38,8 @@
         <a href="/index.html">
           <h1>EShop</h1>
         </a>
-        <ul class="tab-menu">
+        <ul class="tab-menu" id="tab-menu">
           <li><a href="#">Shop</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
         </ul>
       </div>
       <div class="right">
@@ -57,20 +59,30 @@
         <div class="auth" id="authSection">
           <ul class="login-btns">
             <!-- Logged In State -->
-            <li class="login-btns-items" id="logoutBtnContainer" style="display: none;">
-              <button type="button" class="btn btn-danger" id="logoutBtn">
-                Logout
-              </button>
-            </li>
+            <li
+              class="login-btns-items"
+              id="logoutBtnContainer"
+              style="display: none"
+            ></li>
             <!-- Logged Out State -->
             <li class="login-btns-items">
-              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+              <button
+                type="button"
+                class="btn"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+              >
                 Login
               </button>
             </li>
             <!-- Button to trigger signup modal -->
             <li class="login-btns-items">
-              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#signupModal">
+              <button
+                type="button"
+                class="btn"
+                data-bs-toggle="modal"
+                data-bs-target="#signupModal"
+              >
                 Sign up
               </button>
             </li>
@@ -86,300 +98,445 @@
         <!-- Pagination buttons will be dynamically inserted here -->
       </div>
     </main>
+    <!-- ================footer================= -->
     <footer>
-      <!-- Your footer content -->
+      <div class="footer-content">
+        <div class="footer-section about">
+          <h1 class="logo-text">EShop</h1>
+          <p>
+            EShop is an online shopping platform where you can buy a variety of
+            products from different categories.
+          </p>
+          <div class="contact">
+            <span><i class="fas fa-phone"></i> &nbsp; +91-123-456-789</span>
+            <span><i class="fas fa-envelope"></i> &nbsp;</span>
+          </div>
+          <div class="socials">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-section links">
+          <h2>Quick Links</h2>
+          <ul>
+            <a href="#"><li>Events</li></a>
+            <a href="#"><li>Team</li></a>
+            <a href="#"><li>Mentors</li></a>
+            <a href="#"><li>Gallery</li></a>
+          </ul>
+        </div>
+        <div class="footer-section contact-form">
+          <h2>Contact Us</h2>
+          <form action="index.html" method="post">
+            <input
+              type="email"
+              name="email"
+              class="text-input contact-input"
+              placeholder="Your email address..."
+            />
+            <textarea
+              name="message"
+              class="text-input contact-input"
+              placeholder="Your message..."
+            ></textarea>
+            <button type="submit" class="btn btn-big contact-btn">
+              <i class="fas fa-envelope"></i>
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; EShop | Designed by Group 1</div>
     </footer>
+    <!-- ================End Footer=============== -->
+    
     <div id="toast" class="toast">
       <span class="close">&times;</span>
     </div>
   </body>
 
-<!-- ==================Modals======================== -->
-<!-- =================Register Modal================ -->
-<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Sign up</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  <!-- ==================Modals======================== -->
+  <!-- =================Register Modal================ -->
+  <div
+    class="modal fade"
+    id="signupModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sign up</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
           <form id="signupForm">
-              <div class="form-group mb-3">
-                  <label for="name">Full Name:</label>
-                  <input type="text" class="form-control" id="username" name="name" placeholder="Full Name" required onblur="validateField('username')">
-                  <span class="text-danger" id="usernameError"></span>
-              </div>
-              <div class="form-group mb-3">
-                  <label for="email">Email:</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your Email" required onblur="validateField('email', validateEmail)">
-                  <span class="text-danger" id="emailError"></span>
-              </div>
-              <div class="form-group mb-3">
-                  <label for="phone">Phone:</label>
-                  <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number with country code (eg: +91)" required onblur="validateField('phone')">
-                  <span class="text-danger" id="phoneError"></span>
-              </div>
-              <div class="form-group mb-3">
-                  <label for="password">Choose Password:</label>
-                  <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" onblur="validateField('password')" required>
-                  <span class="text-danger" id="passwordError"></span>
-              </div>
-              <div class="form-group mb-3">
-                  <label for="confirmPassword">Confirm Password:</label>
-                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Enter your password again" onblur="validatePasswordMatch()" required>
-                  <span class="text-danger" id="confirmPasswordError"></span>
-              </div>
-
-              <div class="form-group mb-3">
-                <label for="role">Role:</label>
-                <select class="form-control" id="role" name="role" required>
-                    <option value="Customer">Customer</option>
-                    <option value="Seller">Seller</option>
-                </select>
+            <div class="form-group mb-3">
+              <label for="name">Full Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="name"
+                placeholder="Full Name"
+                required
+                onblur="validateField('username')"
+              />
+              <span class="text-danger" id="usernameError"></span>
+            </div>
+            <div class="form-group mb-3">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="Enter your Email"
+                required
+                onblur="validateField('email', validateEmail)"
+              />
+              <span class="text-danger" id="emailError"></span>
+            </div>
+            <div class="form-group mb-3">
+              <label for="phone">Phone:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                placeholder="Phone Number with country code (eg: +91)"
+                required
+                onblur="validateField('phone')"
+              />
+              <span class="text-danger" id="phoneError"></span>
+            </div>
+            <div class="form-group mb-3">
+              <label for="password">Choose Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                onblur="validateField('password')"
+                required
+              />
+              <span class="text-danger" id="passwordError"></span>
+            </div>
+            <div class="form-group mb-3">
+              <label for="confirmPassword">Confirm Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Enter your password again"
+                onblur="validatePasswordMatch()"
+                required
+              />
+              <span class="text-danger" id="confirmPasswordError"></span>
             </div>
 
-              <button type="submit" class="btn btn-primary">Sign Up</button>
-          </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- =================LOGIN Modal================ -->
-
-
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Log in</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="loginemail">Email</label>
-            <input type="email" class="form-control" id="loginemail" onblur="validateField('loginemail', validateEmail)" name="email" placeholder="Enter your email" autocomplete="email" required>
-            <span class="text-danger" id="loginemailError"></span>
-          </div>
-          <div class="form-group">
-            <label for="loginpassword">Password</label>
-            <input type="password" class="form-control" id="loginpassword" name="password" onblur="validateField('loginpassword')" placeholder="Enter your password" autocomplete="current-password" required>
-            <span class="text-danger" id="loginpasswordError"></span>
-          </div>
-          <div class="form-group mb-3">
-            <label for="loginRole">Role:</label>
-            <select class="form-control" id="loginRole" name="role" required>
+            <div class="form-group mb-3">
+              <label for="role">Role:</label>
+              <select class="form-control" id="role" name="role" required>
                 <option value="Customer">Customer</option>
                 <option value="Seller">Seller</option>
-            </select>
-          </div>
-          <ul class="list-group">
-            <li class="list-group-item">
-              <a class="login-links" href="">Forgot Password?</a>
-            </li>
-            <li class="list-group-item">
-              <a class="login-links" href="" data-bs-toggle="modal" data-bs-target="#signupModal">Don't Have an Account?</a>
-            </li>
-            <li class="list-group-item">
-              <button type="submit" class="btn btn-primary">Log in</button>
-            </li>
-          </ul>
-        </form>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
+  <!-- =================LOGIN Modal================ -->
 
-<script>
-  var baseUrl = 'http://localhost:5062/api/User';
+  <div
+    class="modal fade"
+    id="loginModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Log in</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="loginemail">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="loginemail"
+                onblur="validateField('loginemail', validateEmail)"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+              />
+              <span class="text-danger" id="loginemailError"></span>
+            </div>
+            <div class="form-group">
+              <label for="loginpassword">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="loginpassword"
+                name="password"
+                onblur="validateField('loginpassword')"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+              <span class="text-danger" id="loginpasswordError"></span>
+            </div>
+            <div class="form-group mb-3">
+              <label for="loginRole">Role:</label>
+              <select class="form-control" id="loginRole" name="role" required>
+                <option value="Customer">Customer</option>
+                <option value="Seller">Seller</option>
+              </select>
+            </div>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <a class="login-links" href="">Forgot Password?</a>
+              </li>
+              <li class="list-group-item">
+                <a
+                  class="login-links"
+                  href=""
+                  data-bs-toggle="modal"
+                  data-bs-target="#signupModal"
+                  >Don't Have an Account?</a
+                >
+              </li>
+              <li class="list-group-item">
+                <button type="submit" class="btn btn-primary">Log in</button>
+              </li>
+            </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  
-  // Signup form submission
-  document.getElementById('signupForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-  
-    // Clear previous errors
-    clearErrors();
-  
-    // Validate form
-    let isValid = true;
-    if (!validateField('username')) isValid = false;
-    if (!validateField('email', validateEmail)) isValid = false;
-    if (!validateField('phone')) isValid = false;
-    if (!validateField('password')) isValid = false;
-    if (!validatePasswordMatch()) isValid = false;
-    
-    const role = document.getElementById('role').value;
-    if (isValid) {
-      const formData = new FormData(this);
-      const customerRegisterURL = `${baseUrl}/CustomerRegister`;
-      const sellerRegisterURL = `${baseUrl}/SellerRegister`;
-      const url = role === 'Customer' ? customerRegisterURL : sellerRegisterURL;
-      fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(Object.fromEntries(formData)),
-        headers: {
-          'Content-Type': 'application/json'
+  <script>
+    var baseUrl = "http://localhost:5062/api/User";
+
+    // Signup form submission
+    document
+      .getElementById("signupForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Clear previous errors
+        clearErrors();
+
+        // Validate form
+        let isValid = true;
+        if (!validateField("username")) isValid = false;
+        if (!validateField("email", validateEmail)) isValid = false;
+        if (!validateField("phone")) isValid = false;
+        if (!validateField("password")) isValid = false;
+        if (!validatePasswordMatch()) isValid = false;
+
+        const role = document.getElementById("role").value;
+        if (isValid) {
+          const formData = new FormData(this);
+          const customerRegisterURL = `${baseUrl}/CustomerRegister`;
+          const sellerRegisterURL = `${baseUrl}/SellerRegister`;
+          const url =
+            role === "Customer" ? customerRegisterURL : sellerRegisterURL;
+          fetch(url, {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((data) => {
+                  throw new Error(data.errorMessage || "Bad Request");
+                });
+              }
+              return response.json();
+            })
+            .then((data) => {
+              const { role, token } = data;
+
+              // Store role and token in localStorage
+              localStorage.setItem("userRole", role);
+              localStorage.setItem("userToken", token);
+              showToast("Registration successful", "success");
+              window.location.href = "/index.html"; // Example: Redirect to home page
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              const errorMessage =
+                error.message ||
+                "Something went wrong. Please try again later.";
+              showToast(errorMessage, "error");
+            });
         }
-      })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(data => {
-            throw new Error(data.errorMessage || 'Bad Request');
-          });
-        }
-        return response.json();
-      })
-      .then(data => {
-        const { role, token } = data;
-  
-        // Store role and token in localStorage
-        localStorage.setItem('userRole', role);
-        localStorage.setItem('userToken', token);
-        showToast('Registration successful', 'success');
-        window.location.href = '/index.html'; // Example: Redirect to home page
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        const errorMessage = error.message || "Something went wrong. Please try again later.";
-        showToast(errorMessage, "error");
-        });
-    }
-  });
-
-  // Function to handle login form submission
-  document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    // Clear previous errors
-    clearErrors();
-  
-    // Validate form
-    let isValid = true;
-    if (!validateField('loginemail', validateEmail)) isValid = false;
-    if (!validateField('loginpassword')) isValid = false;
-    const role = document.getElementById('loginRole').value;
-    if (isValid) {
-
-      const formData = new FormData(this);
-      const CustomerLoginUrl=`${baseUrl}/CustomerLogin`;
-      const SellerLoginUrl=`${baseUrl}/SellerLogin`;
-      console.log(role);
-      const url = role === 'Customer' ? CustomerLoginUrl : SellerLoginUrl;
-      fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(Object.fromEntries(formData)),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(data => {
-            throw new Error(data.errorMessage || 'Login failed');
-          });
-        }
-        return response.json();
-      })
-      .then(data => {
-        const { role, token } = data;
-  
-        // Store role and token in localStorage
-        localStorage.setItem('userRole', role);
-        localStorage.setItem('userToken', token);
-  
-        // Optionally, you can redirect the user or update UI after successful login
-        console.log('Login successful:', data);
-        showToast('Login successful', 'success');
-        window.location.href = '/index.html'; // Example: Redirect to home page
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        const errorMessage = error.message || "Something went wrong. Please try again later.";
-        showToast(errorMessage, "error");
       });
-    }
-  });
-  
-  
-  const showToast = (message, status) => {
-    const toast = document.getElementById("toast");
-    toast.className = "toast show";
-  
-    // Determine background color based on status
-    let backgroundColor;
-    switch (status) {
-      case "success":
-        backgroundColor = "rgb(4, 100, 4)";
-        break;
-      case "error":
-        backgroundColor = "rgb(186, 93, 93)";
-        break;
-      default:
-        backgroundColor = "rgb(4, 100, 4)"; // Default to success color
-        break;
-    }
-  
-    toast.style.backgroundColor = backgroundColor;
-    toast.innerHTML = `<span class="close">&times;</span> ${message}`;
-  
-    setTimeout(function () {
-      toast.className = toast.className.replace("show", "");
-    }, 3000);
-  
-    const closeButton = document.querySelector('.toast .close');
-    closeButton.onclick = function () {
-      toast.style.visibility = 'hidden';
+
+    // Function to handle login form submission
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Clear previous errors
+        clearErrors();
+
+        // Validate form
+        let isValid = true;
+        if (!validateField("loginemail", validateEmail)) isValid = false;
+        if (!validateField("loginpassword")) isValid = false;
+        const role = document.getElementById("loginRole").value;
+        if (isValid) {
+          const formData = new FormData(this);
+          const CustomerLoginUrl = `${baseUrl}/CustomerLogin`;
+          const SellerLoginUrl = `${baseUrl}/SellerLogin`;
+          console.log(role);
+          const url = role === "Customer" ? CustomerLoginUrl : SellerLoginUrl;
+          fetch(url, {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((data) => {
+                  throw new Error(data.errorMessage || "Login failed");
+                });
+              }
+              return response.json();
+            })
+            .then((data) => {
+              const { role, token } = data;
+
+              // Store role and token in localStorage
+              localStorage.setItem("userRole", role);
+              localStorage.setItem("userToken", token);
+
+              // Optionally, you can redirect the user or update UI after successful login
+              console.log("Login successful:", data);
+              showToast("Login successful", "success");
+              window.location.href = "/index.html"; // Example: Redirect to home page
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              const errorMessage =
+                error.message ||
+                "Something went wrong. Please try again later.";
+              showToast(errorMessage, "error");
+            });
+        }
+      });
+
+    const showToast = (message, status) => {
+      const toast = document.getElementById("toast");
+      toast.className = "toast show";
+
+      // Determine background color based on status
+      let backgroundColor;
+      switch (status) {
+        case "success":
+          backgroundColor = "rgb(4, 100, 4)";
+          break;
+        case "error":
+          backgroundColor = "rgb(186, 93, 93)";
+          break;
+        default:
+          backgroundColor = "rgb(4, 100, 4)"; // Default to success color
+          break;
+      }
+
+      toast.style.backgroundColor = backgroundColor;
+      toast.innerHTML = `<span class="close">&times;</span> ${message}`;
+
+      setTimeout(function () {
+        toast.className = toast.className.replace("show", "");
+      }, 3000);
+
+      const closeButton = document.querySelector(".toast .close");
+      closeButton.onclick = function () {
+        toast.style.visibility = "hidden";
+      };
     };
-  };
 
-
-  function validateField(id, customValidation) {
-    const field = document.getElementById(id);
-    const errorSpan = document.getElementById(id + 'Error');
-    if (!field.value || (customValidation && !customValidation(field.value))) {
-      field.classList.add('is-invalid');
-      errorSpan.textContent = 'This field is required or invalid';
-      return false;
-    } else {
-      field.classList.remove('is-invalid');
-      field.classList.add('is-valid');
-      errorSpan.textContent = '';
-      return true;
+    function validateField(id, customValidation) {
+      const field = document.getElementById(id);
+      const errorSpan = document.getElementById(id + "Error");
+      if (
+        !field.value ||
+        (customValidation && !customValidation(field.value))
+      ) {
+        field.classList.add("is-invalid");
+        errorSpan.textContent = "This field is required or invalid";
+        return false;
+      } else {
+        field.classList.remove("is-invalid");
+        field.classList.add("is-valid");
+        errorSpan.textContent = "";
+        return true;
+      }
     }
-  }
 
-  function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function validatePasswordMatch() {
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const errorSpan = document.getElementById('confirmPasswordError');
-    if (password !== confirmPassword) {
-      document.getElementById('confirmPassword').classList.add('is-invalid');
-      errorSpan.textContent = 'Passwords do not match';
-      return false;
-    } else {
-      document.getElementById('confirmPassword').classList.remove('is-invalid');
-      document.getElementById('confirmPassword').classList.add('is-valid');
-      errorSpan.textContent = '';
-      return true;
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
     }
-  }
 
-  function clearErrors() {
-    const errorSpans = document.querySelectorAll('span.text-danger');
-    errorSpans.forEach(span => span.textContent = '');
-    const invalidFields = document.querySelectorAll('.is-invalid');
-    invalidFields.forEach(field => field.classList.remove('is-invalid'));
-    const validFields = document.querySelectorAll('.is-valid');
-    validFields.forEach(field => field.classList.remove('is-valid'));
-  }
-</script>
+    function validatePasswordMatch() {
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const errorSpan = document.getElementById("confirmPasswordError");
+      if (password !== confirmPassword) {
+        document.getElementById("confirmPassword").classList.add("is-invalid");
+        errorSpan.textContent = "Passwords do not match";
+        return false;
+      } else {
+        document
+          .getElementById("confirmPassword")
+          .classList.remove("is-invalid");
+        document.getElementById("confirmPassword").classList.add("is-valid");
+        errorSpan.textContent = "";
+        return true;
+      }
+    }
+
+    function clearErrors() {
+      const errorSpans = document.querySelectorAll("span.text-danger");
+      errorSpans.forEach((span) => (span.textContent = ""));
+      const invalidFields = document.querySelectorAll(".is-invalid");
+      invalidFields.forEach((field) => field.classList.remove("is-invalid"));
+      const validFields = document.querySelectorAll(".is-valid");
+      validFields.forEach((field) => field.classList.remove("is-valid"));
+    }
+  </script>
 </html>

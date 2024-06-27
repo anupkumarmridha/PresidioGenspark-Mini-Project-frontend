@@ -214,9 +214,19 @@ function isAuthenticated() {
   return !!localStorage.getItem('userToken');
 }
 
+function isSeller() {
+    const role = localStorage.getItem('userRole');
+    return role === 'Seller';
+}
+function isCustomer() {
+    const role = localStorage.getItem('userRole');
+    return role === 'Customer';
+}
+
 function updateUI() {
   const authSection = document.getElementById('authSection');
   const logoutBtnContainer = document.getElementById('logoutBtnContainer');
+  const tabMenu = document.getElementById('tab-menu');
 
   if (isAuthenticated()) {
     // User is authenticated, show logout button
@@ -230,6 +240,16 @@ function updateUI() {
       </ul>
     `;
     logoutBtnContainer.style.display = 'inline-block';
+
+    if (isSeller()) {
+        tabMenu.appendChild(
+            document.createElement('li')).
+            innerHTML = `<a href="/Product/Product.html">Dashboard</a>`;
+    }
+    if(isCustomer()) {
+       tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="#">Cart</a>`;
+       tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="#">Orders</a>`;
+    }
   } else {
     // User is not authenticated, show login/signup buttons
     authSection.innerHTML = `

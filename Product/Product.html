@@ -20,10 +20,58 @@
 
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="../assets/css/productStyle.css" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
     <!--=============== JS ===============-->
     <script src="../assets/js/product.js"></script>
+    <script src="../assets/js/main.js"></script>
 </head>
 <body>
+    <!--=================Header=================-->
+    <header>
+        <div class="left">
+          <a href="/index.html">
+            <h1>EShop</h1>
+          </a>
+          <ul class="tab-menu" id="tab-menu">
+            <li><a href="#">Shop</a></li>
+          </ul>
+        </div>
+        <div class="right">
+          <div class="auth" id="authSection">
+            <ul class="login-btns">
+              <!-- Logged In State -->
+              <li
+                class="login-btns-items"
+                id="logoutBtnContainer"
+                style="display: none"
+              ></li>
+              <!-- Logged Out State -->
+              <li class="login-btns-items">
+                <button
+                  type="button"
+                  class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginModal"
+                >
+                  Login
+                </button>
+              </li>
+              <!-- Button to trigger signup modal -->
+              <li class="login-btns-items">
+                <button
+                  type="button"
+                  class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#signupModal"
+                >
+                  Sign up
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal">
         Add Product
       </button>
@@ -48,13 +96,13 @@
                             <input type="text" class="form-control" id="productCategory" onblur="validateField('productCategory')" name="productCategory">
                             <br><br>
                             <label for="productPrice">Price: <span id="productPriceError"></span></label>
-                            <input type="number" class="form-control"  id="productPrice" onblur="validateField('productPrice')" name="productPrice">
+                            <input type="decimal" class="form-control"  id="productPrice" onblur="validateField('productPrice')" name="productPrice">
                             <br><br>
                             <label for="productQuantity">Quantity: <span id="productQuantityError"></span></label>
                             <input type="number" class="form-control"  id="productQuantity" onblur="validateField('productQuantity')"name="productQuantity">
                             <br><br>
                             <label for="productImage">Image: <span id="productImageError"></span></label>
-                            <input type="file" class="form-control" id="productImage" onblur="validateField('productImage')" name="productImage">
+                            <input type="file" class="form-control" id="productImage" name="productImage">
                             
                             <br><br>
                             <button type="submit" class="btn btn-success">Add Product</button>
@@ -84,12 +132,72 @@
 
     <!-- Pagination Controls -->
     <nav aria-label="Page navigation example">
-        <ul class="pagination" id="pagination">
+        <ul class="pagination" id="pagination-product">
         </ul>
     </nav>
 
+    <!-- ================footer================= -->
+    <footer>
+        <div class="footer-content">
+          <div class="footer-section about">
+            <h1 class="logo-text">EShop</h1>
+            <p>
+              EShop is an online shopping platform where you can buy a variety of
+              products from different categories.
+            </p>
+            <div class="contact">
+              <span><i class="fas fa-phone"></i> &nbsp; +91-123-456-789</span>
+              <span><i class="fas fa-envelope"></i> &nbsp;</span>
+            </div>
+            <div class="socials">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-section links">
+            <h2>Quick Links</h2>
+            <ul>
+              <a href="#"><li>Events</li></a>
+              <a href="#"><li>Team</li></a>
+              <a href="#"><li>Mentors</li></a>
+              <a href="#"><li>Gallery</li></a>
+            </ul>
+          </div>
+          <div class="footer-section contact-form">
+            <h2>Contact Us</h2>
+            <form action="index.html" method="post">
+              <input
+                type="email"
+                name="email"
+                class="text-input contact-input"
+                placeholder="Your email address..."
+              />
+              <textarea
+                name="message"
+                class="text-input contact-input"
+                placeholder="Your message..."
+              ></textarea>
+              <button type="submit" class="btn btn-big contact-btn">
+                <i class="fas fa-envelope"></i>
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="footer-bottom">&copy; EShop | Designed by Group 1</div>
+      </footer>
+      <!-- ================End Footer=============== -->
+      
+
+
     <!-- Toast message container -->
-    <div id="toast" class="toast" style="position: fixed; bottom: 10px; right: 10px;"></div>
+    <div id="toast" class="toast">
+        <span class="message"></span>
+        <button class="close">&times;</button>
+    </div>
+    
 </body>
 
 <!-- =================================Script================================= -->
@@ -139,8 +247,25 @@
         formData.append('categoryName', document.getElementById('productCategory').value);
         formData.append('price', parseFloat(document.getElementById('productPrice').value));
         formData.append('quantity', parseInt(document.getElementById('productQuantity').value));
-        formData.append('image', document.getElementById('productImage').files[0]);
+        const image = document.getElementById('productImage').files[0] || "";
+        formData.append('imageUrl', image);
         return formData;
+    }
+    
+    function formDataToJson(formData) {
+        const jsonObject = {};
+    
+        formData.forEach((value, key) => {
+            if (key === 'quantity') {
+                jsonObject[key] = parseInt(value, 10); // Convert to integer
+            } else if (key === 'price') {
+                jsonObject[key] = parseFloat(value); // Convert to decimal
+            } else {
+                jsonObject[key] = value;
+            }
+        });
+    
+        return jsonObject;
     }
 
     function validateForm(data) {
@@ -172,10 +297,10 @@
             isValid = false;
             document.getElementById('productQuantityError').textContent = 'Quantity must be greater than 0';
         }
-        if (!data.get('image')) {
-            isValid = false;
-            document.getElementById('productImageError').textContent = 'Image is required';
-        }
+        //if (!data.get('image')) {
+          //  isValid = false;
+           // document.getElementById('productImageError').textContent = 'Image is required';
+        //}
 
         return isValid;
     }
@@ -195,21 +320,36 @@
         }
       }
 
-    async function submitProductForm(formData) {
-        const response = await fetch(`${baseUrl}/Product`, {
-            method: 'POST',
-            body: formData
-        });
+      const userToken = localStorage.getItem('userToken');
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.errorMessage || 'Failed to add product');
-        }
+      async function submitProductForm(formData) {
+          try {
+            const bodyData=formDataToJson(formData);
+            
+              const response = await fetch(`${baseUrl}/Product`, {
+                  method: 'POST',
+                  body: JSON.stringify(bodyData),
+                  headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'application/json'
+                  }
+              });
+      
+              if (!response.ok) {
+                  const errorData = await response.json();
+                  console.log(errorData);
+                  throw new Error(errorData.errorMessage || 'Failed to add product');
+              }
 
-        return await response.json();
-    }
-
-    function addProductToTable(product) {
+      
+              return await response.json();
+          } catch (error) {
+              console.error('Error while submitting product form:', error);
+              throw error;
+          }
+      }
+      
+      function addProductToTable(product) {
         const { productId, name, description, category, quantity, price } = product;
         const imageUrl = product.imageUrl || '../assets/img/product-8-1.jpg';
 
@@ -274,7 +414,11 @@
     async function deleteProduct(productId) {
         try {
             const response = await fetch(`${baseUrl}/Product/${productId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'application/json'
+                  }
             });
             if (!response.ok) {
                 throw new Error('Failed to delete product');
@@ -301,7 +445,7 @@
 
     function renderPagination() {
         const totalPages = Math.ceil(products.length / productsPerPage);
-        const pagination = document.getElementById('pagination');
+        const pagination = document.getElementById('pagination-product');
         pagination.innerHTML = '';
     
         for (let i = 1; i <= totalPages; i++) {
@@ -342,16 +486,23 @@
     function showToast(message, status) {
         const toast = document.getElementById('toast');
         toast.className = `toast show ${status}`;
-        toast.textContent = message;
+        const messageSpan = toast.querySelector('.message');
+        if (messageSpan) {
+            messageSpan.textContent = message;
+        } else {
+            toast.textContent = message;
+        }
+        
         setTimeout(function() {
             toast.className = toast.className.replace("show", "");
         }, 3000);
-
-        var closeButton = document.querySelector('.toast .close');
-        closeButton.onclick = function() {
-            var toast = this.parentElement;
-            toast.style.visibility = 'hidden';
-        };
+    
+        const closeButton = toast.querySelector('.close');
+        if (closeButton) {
+            closeButton.onclick = function() {
+                toast.style.visibility = 'hidden';
+            };
+        }
     }
 
     // Fetch and display existing products on page load
