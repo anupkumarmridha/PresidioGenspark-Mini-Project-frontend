@@ -8,7 +8,7 @@ $(document).ready(function () {
   let products = [];
   const productsPerPage = 6;
   let currentPage = 1;
-
+  const baseUrl = 'http://localhost:5062/api';
   const fetchTemplate = async (url) => {
       try {
           const response = await fetch(url);
@@ -178,18 +178,14 @@ $(document).ready(function () {
 
   const addToCart = async (productId, quantity) => {
       try {
-          const response = await fetch('https://dummyjson.com/carts/add', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                  userId: 1,
-                  products: [
-                      {
-                          id: productId,
-                          quantity: quantity,
-                      }
-                  ]
-              })
+          const response =  await fetch(`${baseUrl}/Cart`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${userToken}`,
+              'Accept': 'text/plain',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId, quantity })
           });
 
           const data = await response.json();
@@ -247,7 +243,7 @@ function updateUI() {
             innerHTML = `<a href="/Product/Product.html">Dashboard</a>`;
     }
     if(isCustomer()) {
-       tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="#">Cart</a>`;
+       tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="/cart.html">Cart</a>`;
        tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="#">Orders</a>`;
     }
   } else {

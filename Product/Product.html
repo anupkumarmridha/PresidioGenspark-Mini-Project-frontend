@@ -75,6 +75,7 @@
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal">
         Add Product
       </button>
+  
     <!-- ==================Add Product Modal======================= -->
     <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -112,6 +113,45 @@
             </div>
         </div>
     </div>
+
+    <!-- ==================Edit Product Modal======================= -->
+    <div class="modal fade" id="productEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="form">
+                      <form id="productForm" enctype="multipart/form-data">
+                          <label for="productName">Product Name: <span id="productNameError"></span></label>
+                          <input type="text" class="form-control" id="productName" onblur="validateField('productName')" name="productName">
+                          <br><br>
+                          <label for="productDescription">Description: <span id="productDescriptionError"></span></label>
+                          <textarea id="productDescription" onblur="validateField('productDescription')" class="form-control" name="productDescription"></textarea>
+                          <br><br>
+                          <label for="productCategory">Category: <span id="productCategoryError"></span></label>
+                          <input type="text" class="form-control" id="productCategory" onblur="validateField('productCategory')" name="productCategory">
+                          <br><br>
+                          <label for="productPrice">Price: <span id="productPriceError"></span></label>
+                          <input type="decimal" class="form-control" id="productPrice" onblur="validateField('productPrice')" name="productPrice">
+                          <br><br>
+                          <label for="productQuantity">Quantity: <span id="productQuantityError"></span></label>
+                          <input type="number" class="form-control" id="productQuantity" onblur="validateField('productQuantity')" name="productQuantity">
+                          <br><br>
+                          <label for="productImage">Image: <span id="productImageError"></span></label>
+                          <input type="file" class="form-control" id="productImage" name="productImage">
+                          <br><br>
+                          <button type="submit" class="btn btn-success">Edit Product</button>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
     <h1>Product List</h1>
     <table id="productTable" class="table table-striped">
         <thead>
@@ -208,9 +248,9 @@
     let currentPage = 1;
     let products = [];
 
-    document.getElementById('productForm').addEventListener('submit', handleProductFormSubmit);
+    document.getElementById('productForm').addEventListener('submit', handleAddProductFormSubmit);
 
-    async function handleProductFormSubmit(event) {
+    async function handleAddProductFormSubmit(event) {
         event.preventDefault();
 
         clearErrorMessages();
@@ -221,7 +261,7 @@
         }
 
         try {
-            const responseData = await submitProductForm(formData);
+            const responseData = await submitAddProductForm(formData);
             products.push(responseData);
             renderTable();
             resetForm();
@@ -322,7 +362,7 @@
 
       const userToken = localStorage.getItem('userToken');
 
-      async function submitProductForm(formData) {
+      async function submitAddProductForm(formData) {
           try {
             const bodyData=formDataToJson(formData);
             
@@ -352,33 +392,33 @@
       function addProductToTable(product) {
         const { productId, name, description, category, quantity, price } = product;
         const imageUrl = product.imageUrl || '../assets/img/product-8-1.jpg';
-
+    
         const newRow = document.createElement('tr');
-
+    
         const idCell = document.createElement('td');
         idCell.textContent = productId;
         newRow.appendChild(idCell);
-
+    
         const nameCell = document.createElement('td');
         nameCell.textContent = name;
         newRow.appendChild(nameCell);
-
+    
         const descriptionCell = document.createElement('td');
         descriptionCell.textContent = description;
         newRow.appendChild(descriptionCell);
-
+    
         const categoryCell = document.createElement('td');
         categoryCell.textContent = category.name;
         newRow.appendChild(categoryCell);
-
+    
         const quantityCell = document.createElement('td');
         quantityCell.textContent = quantity;
         newRow.appendChild(quantityCell);
-
+    
         const priceCell = document.createElement('td');
         priceCell.textContent = price;
         newRow.appendChild(priceCell);
-
+    
         const imageCell = document.createElement('td');
         const image = document.createElement('img');
         image.src = imageUrl;
@@ -387,29 +427,111 @@
         image.height = 50;
         imageCell.appendChild(image);
         newRow.appendChild(imageCell);
-
+    
         const actionCell = document.createElement('td');
         const editButton = document.createElement('button');
         editButton.textContent = 'Edit';
         editButton.className = 'btn btn-primary btn-sm me-2';
+        editButton.setAttribute('data-bs-toggle', 'modal');
+        editButton.setAttribute('data-bs-target', '#productEditModal');
         editButton.addEventListener('click', () => editProduct(productId));
-
+    
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.className = 'btn btn-danger btn-sm';
         deleteButton.addEventListener('click', () => deleteProduct(productId));
-
+    
         actionCell.appendChild(editButton);
         actionCell.appendChild(deleteButton);
         newRow.appendChild(actionCell);
-
+    
         document.querySelector('#productTable tbody').appendChild(newRow);
     }
 
-    async function editProduct(productId) {
-        // Add your logic to edit the product
-        showToast(`Edit functionality for product ID ${productId} is not implemented`, 'info');
+   
+    async function fetchProduct(productId) {
+      try {
+          const response = await fetch(`${baseUrl}/Product/${productId}`);
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          const product = await response.json();
+          return product;
+      } catch (error) {
+          console.error('There was a problem with the fetch operation:', error);
+      }
+  }
+  
+  function populateModalFields(product) {
+    const productName=getElementById('productName');
+      console.log(product);
+      document.getElementById('productName').value = product.name;
+      document.getElementById('productDescription').value = product.description;
+      document.getElementById('productCategory').value = product.category.name;
+      document.getElementById('productPrice').value = product.price;
+      document.getElementById('productQuantity').value = product.quantity;
+      // Assuming the image input should not be pre-filled for security reasons
+  }
+  
+  async function editProduct(productId) {
+      try {
+          const product = await fetchProduct(productId);
+          if (product) {
+              populateModalFields(product);
+              // Set a hidden field with the product ID for the update or use the form's dataset
+              document.getElementById('productForm').dataset.productId = productId;
+          }
+      } catch (error) {
+          console.error('Error fetching product:', error);
+      }
+  }
+  
+  async function handleEditProductFormSubmit(event) {
+      event.preventDefault();
+  
+      clearErrorMessages();
+      const formData = getFormData();
+  
+      if (!validateForm(formData)) {
+          return;
+      }
+  
+      try {
+          const responseData = await submitEditProductForm(formData);
+          products.push(responseData);
+          renderTable();
+          resetForm();
+          showToast('Product Edit successfully', 'success');
+      } catch (error) {
+          showToast(error.message, 'error');
+      }
+  }
+
+  async function submitEditProductForm(formData) {
+    try {
+        const bodyData = formDataToJson(formData);
+        const response = await fetch(`${baseUrl}/Product`, {
+            method: 'PUT',
+            body: JSON.stringify(bodyData),
+            headers: {
+                'Authorization': `Bearer ${userToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData);
+            throw new Error(errorData.errorMessage || 'Failed to Edit product');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error while submitting product form:', error);
+        throw error;
     }
+}
+
 
     async function deleteProduct(productId) {
         try {

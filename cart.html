@@ -4,40 +4,77 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--=============== FLATICON ===============-->
-    <link rel="stylesheet" href="" />
-
-    <!--=============== SWIPER CSS ===============-->
-    <link rel="stylesheet" href="" />
-
     <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="" />
+    <link rel="stylesheet" href="assets/css/cart.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
 
     <title>Ecommerce Website</title>
   </head>
   <body>
     <!--=============== HEADER ===============-->
-    <header class="header"></header>
-
-    <!--=============== MAIN ===============-->
-    <main class="main">
-      <!--=============== BREADCRUMB ===============-->
-      <section class="breadcrumb"></section>
-
+    <header>
+      <div class="left">
+        <a href="/index.html">
+          <h1>EShop</h1>
+        </a>
+        <ul class="tab-menu" id="tab-menu">
+          <li><a href="#">Shop</a></li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="search-filter">
+          <input type="text" id="search-bar" placeholder="Search products..." />
+          <select id="category-filter">
+            <option value="all">All Categories</option>
+            <!-- Add more categories as needed -->
+          </select>
+          <select id="rating-filter">
+            <option value="all">All Ratings</option>
+            <option value="high">4.5 and above</option>
+            <option value="medium">3.5 to 4.49</option>
+            <option value="low">Below 3.5</option>
+          </select>
+        </div>
+        <div class="auth" id="authSection">
+          <ul class="login-btns">
+            <!-- Logged In State -->
+            <li
+              class="login-btns-items"
+              id="logoutBtnContainer"
+              style="display: none"
+            ></li>
+            <!-- Logged Out State -->
+            <li class="login-btns-items">
+              <button
+                type="button"
+                class="btn"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+              >
+                Login
+              </button>
+            </li>
+            <!-- Button to trigger signup modal -->
+            <li class="login-btns-items">
+              <button
+                type="button"
+                class="btn"
+                data-bs-toggle="modal"
+                data-bs-target="#signupModal"
+              >
+                Sign up
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
       <!--=============== CART ===============-->
-      <section class="cart"></section>
-
-      <!--=============== NEWSLETTER ===============-->
-      <section class="newsletter"></section>
-    </main>
-
+      <section class="cart" id="cart"></section>
     <!--=============== FOOTER ===============-->
     <footer class="footer"></footer>
-
-    <!--=============== SWIPER JS ===============-->
-    <script src=""></script>
-
-    <!--=============== MAIN JS ===============-->
-    <script src=""></script>
   </body>
+
+  <!--=============== JS ===============-->
+  <script src="assets/js/cart.js"></script>
 </html>
