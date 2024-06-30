@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/address.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <title>Ecommerce Website</title>
+  </head>
+  <body>
+    <!--=============== HEADER ===============-->
+    <header>
+        <div class="left">
+          <a href="/index.html">
+            <h1>EShop</h1>
+          </a>
+          <ul class="tab-menu" id="tab-menu">
+            <li><a href="#">Shop</a></li>
+          </ul>
+        </div>
+       
+      </header>
+
+
+    <!-- Address Section -->
+    <section class="address" id="address">
+        <button class="btn btn-success" onclick="showAddModal()">Add Address</button>
+        <div class="address-container" id="addressContainer"></div>
+    </section>
+
+    <!-- Modal for Address Form -->
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addressModalLabel">Address Form</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addressForm">
+              <div class="form-group">
+                <label for="addressType">Address Type:</label>
+                <input type="text" class="form-control" id="addressType" name="addressType" required />
+              </div>
+              <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required />
+              </div>
+              <div class="form-group">
+                <label for="street">Street:</label>
+                <input type="text" class="form-control" id="street" name="street" required />
+              </div>
+              <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" id="city" name="city" required />
+              </div>
+              <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" class="form-control" id="state" name="state" required />
+              </div>
+              <div class="form-group">
+                <label for="zipCode">Zip Code:</label>
+                <input type="text" class="form-control" id="zipCode" name="zipCode" required />
+              </div>
+              <div class="form-group">
+                <label for="country">Country:</label>
+                <input type="text" class="form-control" id="country" name="country" required />
+              </div>
+              <button type="submit" class="btn btn-primary">Save Address</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--=============== FOOTER ===============-->
+    <footer class="footer"></footer>
+
+    <!--=============== JS ===============-->
+    <script src="assets/js/address.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
