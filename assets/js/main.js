@@ -25,7 +25,8 @@ $(document).ready(function () {
               url: url,
               method: 'GET',
           });
-          products = response.products;
+          products = response;
+          console.log('Products:', products);
           displayProducts(products);
           setupPagination(products);
       } catch (error) {
@@ -36,7 +37,7 @@ $(document).ready(function () {
   const fetchCategories = async () => {
       try {
           const response = await $.ajax({
-              url: 'https://dummyjson.com/products/categories',
+              url: `${baseUrl}/Product/categories`,
               method: 'GET',
           });
           populateCategories(response);
@@ -47,49 +48,83 @@ $(document).ready(function () {
 
   const populateCategories = (categories) => {
       categories.forEach(category => {
-          const option = $(`<option value="${category}">${category}</option>`);
+          const option = $(`<option value="${category.categoryId}">${category.name}</option>`);
           categoryFilter.append(option);
       });
   };
 
+  // const displayProducts = async (productArray) => {
+  //     const template = await fetchTemplate('Product/ProductCard.html');
+  //     productList.empty();
+  //     const start = (currentPage - 1) * productsPerPage;
+  //     const end = start + productsPerPage;
+  //     const paginatedProducts = productArray.slice(start, end);
+
+  //     paginatedProducts.forEach(product => {
+  //         const productCard = template
+  //             .replace(/{thumbnail}/g, product.thumbnail || 'default.jpg')
+  //             .replace(/{title}/g, product.title)
+  //             .replace(/{description}/g, product.description)
+  //             .replace(/{brand}/g, product.brand)
+  //             .replace(/{sku}/g, product.sku)
+  //             .replace(/{weight}/g, product.weight)
+  //             .replace(/{dimensions}/g, `${product.dimensions.width}x${product.dimensions.height}x${product.dimensions.depth} cm`)
+  //             .replace(/{warrantyInformation}/g, product.warrantyInformation)
+  //             .replace(/{shippingInformation}/g, product.shippingInformation)
+  //             .replace(/{price}/g, product.price.toFixed(2))
+  //             .replace(/{discountPercentage}/g, product.discountPercentage)
+  //             .replace(/{ratingClass}/g, getRatingClass(product.rating))
+  //             .replace(/{rating}/g, product.rating)
+  //             .replace(/{stockClass}/g, product.availabilityStatus === 'Low Stock' ? 'low-stock' : '')
+  //             .replace(/{availabilityStatus}/g, product.availabilityStatus)
+  //             .replace(/{reviewsCount}/g, product.reviews.length)
+  //             .replace(/{averageRating}/g, calculateAverageRating(product.reviews))
+  //             .replace(/{id}/g, product.id);
+
+  //         productList.append(productCard);
+  //     });
+
+  //     $('.add-to-cart-btn').on('click', function () {
+  //       const productId = $(this).data('product-id');
+  //       let quantity=document.getElementById(`quantity-${productId}`).value;
+  //       console.log(quantity);
+  //         addToCart(productId, quantity);
+  //     });
+  // };
+
   const displayProducts = async (productArray) => {
-      const template = await fetchTemplate('Product/ProductCard.html');
-      productList.empty();
-      const start = (currentPage - 1) * productsPerPage;
-      const end = start + productsPerPage;
-      const paginatedProducts = productArray.slice(start, end);
+    const template = await fetchTemplate('Product/ProductCard.html');
+    productList.empty();
+    const start = (currentPage - 1) * productsPerPage;
+    const end = start + productsPerPage;
+    const paginatedProducts = productArray.slice(start, end);
 
-      paginatedProducts.forEach(product => {
-          const productCard = template
-              .replace(/{thumbnail}/g, product.thumbnail || 'default.jpg')
-              .replace(/{title}/g, product.title)
-              .replace(/{description}/g, product.description)
-              .replace(/{brand}/g, product.brand)
-              .replace(/{sku}/g, product.sku)
-              .replace(/{weight}/g, product.weight)
-              .replace(/{dimensions}/g, `${product.dimensions.width}x${product.dimensions.height}x${product.dimensions.depth} cm`)
-              .replace(/{warrantyInformation}/g, product.warrantyInformation)
-              .replace(/{shippingInformation}/g, product.shippingInformation)
-              .replace(/{price}/g, product.price.toFixed(2))
-              .replace(/{discountPercentage}/g, product.discountPercentage)
-              .replace(/{ratingClass}/g, getRatingClass(product.rating))
-              .replace(/{rating}/g, product.rating)
-              .replace(/{stockClass}/g, product.availabilityStatus === 'Low Stock' ? 'low-stock' : '')
-              .replace(/{availabilityStatus}/g, product.availabilityStatus)
-              .replace(/{reviewsCount}/g, product.reviews.length)
-              .replace(/{averageRating}/g, calculateAverageRating(product.reviews))
-              .replace(/{id}/g, product.id);
+    paginatedProducts.forEach(product => {
+        const productCard = template
+            .replace(/{thumbnail}/g, product.imageUrl || '/assets/img/product-2-1.jpg')
+            .replace(/{title}/g, product.name)
+            .replace(/{description}/g, product.description)
+            .replace(/{category}/g, product.category.name)  // Assuming brand is stored in category name
+            .replace(/{price}/g, product.price.toFixed(2))
+            .replace(/{ratingClass}/g, getRatingClass(product.rating || 0))
+            .replace(/{rating}/g, product.rating || '0')
+            .replace(/{stockClass}/g, product.quantity < 10 ? 'low-stock' : '')  // Assuming low stock is less than 10
+            .replace(/{availabilityStatus}/g, product.quantity < 10 ? 'Low Stock' : 'In Stock')
+            .replace(/{reviewsCount}/g, product.reviews ? product.reviews.length : 0)
+            .replace(/{averageRating}/g, product.reviews ? calculateAverageRating(product.reviews) : '0')
+            .replace(/{id}/g, product.productId);
 
-          productList.append(productCard);
-      });
+        productList.append(productCard);
+    });
 
-      $('.add-to-cart-btn').on('click', function () {
+    $('.add-to-cart-btn').on('click', function () {
         const productId = $(this).data('product-id');
-        let quantity=document.getElementById(`quantity-${productId}`).value;
+        let quantity = document.getElementById(`quantity-${productId}`).value;
         console.log(quantity);
-          addToCart(productId, quantity);
-      });
-  };
+        addToCart(productId, quantity);
+    });
+};
+
 
   const setupPagination = (productArray) => {
       pagination.empty();
@@ -127,39 +162,88 @@ $(document).ready(function () {
   };
 
   const filterProducts = async () => {
-      const searchQuery = searchBar.val().toLowerCase();
-      const selectedCategory = categoryFilter.val();
-      const selectedRating = ratingFilter.val();
+    const searchQuery = searchBar.val().toLowerCase();
+    const selectedCategory = categoryFilter.val();
+    const selectedRating = ratingFilter.val();
+    const minPrice = $('#min-price').val() || 0;
+    let maxPrice = $('#max-price').val();
 
-      let url = 'https://dummyjson.com/products';
-      if (selectedCategory !== 'all') {
-          url = `https://dummyjson.com/products/category/${selectedCategory}`;
-      }
+    // Ensure maxPrice is a valid number and set a reasonable default if not
+    if (!maxPrice || isNaN(maxPrice)) {
+        maxPrice = 1000000; // Set a reasonable default maximum price
+    }
+
+    let url = `${baseUrl}/Product/filter?minPrice=${minPrice}&maxPrice=${maxPrice}`;
+
+    if (selectedCategory !== 'all') {
+        url += `&categoryId=${selectedCategory}`;
+    }
+
+    if (selectedRating === 'high') {
+        url += `&minRating=4.5`;
+    } else if (selectedRating === 'medium') {
+        url += `&minRating=3.5&maxRating=4.49`;
+    } else if (selectedRating === 'low') {
+        url += `&maxRating=3.49`;
+    }
+    // console.log(url);
+
+    await fetchProducts(url);
+    applyFiltersAndSort(searchQuery);
+};
+
+// Function to apply additional filters and sort the products
+const applyFiltersAndSort = async (searchQuery) => {
+    let filteredProducts = products.filter(product => {
+        return product.name.toLowerCase().includes(searchQuery) || product.description.toLowerCase().includes(searchQuery);
+    });
+
+    filteredProducts.sort((a, b) => b.rating - a.rating);
+    await displayProducts(filteredProducts);
+};
+
+function debounce(func, delay) {
+  let debounceTimer;
+  return function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(this, arguments), delay);
+  };
+}
+
+  // const filterProducts = async () => {
+  //     const searchQuery = searchBar.val().toLowerCase();
+  //     const selectedCategory = categoryFilter.val();
+  //     const selectedRating = ratingFilter.val();
+
+  //     let url = `${baseUrl}/Product`;
+  //     if (selectedCategory !== 'all') {
+  //         url = `https://dummyjson.com/products/category/${selectedCategory}`;
+  //     }
       
-      await fetchProducts(url);
-      applyFiltersAndSort(searchQuery, selectedRating);
-  };
+  //     await fetchProducts(url);
+  //     applyFiltersAndSort(searchQuery, selectedRating);
+  // };
 
-  const applyFiltersAndSort = async (searchQuery, selectedRating) => {
-      let filteredProducts = products.filter(product => {
-          const matchesSearch = product.title.toLowerCase().includes(searchQuery) || product.description.toLowerCase().includes(searchQuery);
-          let matchesRating = true;
-          if (selectedRating === 'high') {
-              matchesRating = product.rating >= 4.5;
-          } else if (selectedRating === 'medium') {
-              matchesRating = product.rating >= 3.5 && product.rating < 4.5;
-          } else if (selectedRating === 'low') {
-              matchesRating = product.rating < 3.5;
-          }
+  // const applyFiltersAndSort = async (searchQuery, selectedRating) => {
+  //     let filteredProducts = products.filter(product => {
+  //         const matchesSearch = product.title.toLowerCase().includes(searchQuery) || product.description.toLowerCase().includes(searchQuery);
+  //         let matchesRating = true;
+  //         if (selectedRating === 'high') {
+  //             matchesRating = product.rating >= 4.5;
+  //         } else if (selectedRating === 'medium') {
+  //             matchesRating = product.rating >= 3.5 && product.rating < 4.5;
+  //         } else if (selectedRating === 'low') {
+  //             matchesRating = product.rating < 3.5;
+  //         }
 
-          return matchesSearch && matchesRating;
-      });
+  //         return matchesSearch && matchesRating;
+  //     });
 
-      // Sort products by rating in descending order
-      filteredProducts.sort((a, b) => b.rating - a.rating);
+  //     // Sort products by rating in descending order
+  //     filteredProducts.sort((a, b) => b.rating - a.rating);
 
-      await displayProducts(filteredProducts);
-  };
+  //     await displayProducts(filteredProducts);
+  // };
 
   const showToast = (message) => {
       const toast = document.getElementById("toast");
@@ -201,7 +285,8 @@ $(document).ready(function () {
   categoryFilter.on('change', filterProducts);
   ratingFilter.on('change', filterProducts);
 
-  fetchProducts('https://dummyjson.com/products');
+  // fetchProducts('https://dummyjson.com/products');
+  fetchProducts(`${baseUrl}/Product`);
   fetchCategories();
 
   // Auth Related

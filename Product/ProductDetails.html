@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="/assets/css/productDetails.css">
+</head>
+<body>
+    <div class="product-details-container">
+        <div class="product-image">
+            <img src="{imageUrl}" alt="{name}">
+        </div>
+        <div class="product-info">
+            <h1>{name}</h1>
+            <p>{description}</p>
+            <div class="category">Category: {category.name}</div>
+            <div class="price">Price: ${price}</div>
+            <div class="rating {ratingClass}">Rating: {rating}</div>
+            <div class="stock {stockClass}">{availabilityStatus}</div>
+            <div class="reviews-summary">Reviews: {reviews.length} (Avg. Rating: {averageRating})</div>
+
+            <!-- Quantity Selector -->
+            <div class="quantity-selector">
+                <label for="quantity-{productId}">Quantity:</label>
+                <input type="number" id="quantity-{productId}" name="quantity" min="1" value="1">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn add-to-cart-btn" data-product-id="{productId}">Add to Cart</button>
+                <button class="btn buy-now-btn" data-product-id="{productId}">Buy Now</button>
+            </div>
+        </div>
+        <div class="product-reviews">
+            <h2>Customer Reviews</h2>
+            <div class="review-list">
+                {reviews.map(review => `
+                    <div class="review">
+                        <div class="review-rating">Rating: ${review.rating}</div>
+                        <p class="review-comment">${review.comment}</p>
+                        <div class="review-date">Reviewed on: ${new Date(review.createdDate).toLocaleDateString()}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    </div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('.add-to-cart-btn').addEventListener('click', function () {
+            const productId = this.dataset.productId;
+            const quantity = document.getElementById(`quantity-${productId}`).value;
+            addToCart(productId, quantity);
+        });
+    
+        document.querySelector('.buy-now-btn').addEventListener('click', function () {
+            const productId = this.dataset.productId;
+            const quantity = document.getElementById(`quantity-${productId}`).value;
+            buyNow(productId, quantity);
+        });
+    });
+    
+    function addToCart(productId, quantity) {
+        console.log(`Adding product ${productId} with quantity ${quantity} to cart`);
+        // Your add to cart logic here
+    }
+    
+    function buyNow(productId, quantity) {
+        console.log(`Buying product ${productId} with quantity ${quantity}`);
+        // Your buy now logic here
+    }
+    
+   </script>
+</body>
+</html>
