@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="assets/css/address.css" />
     <link rel="stylesheet" href="assets/css/styles.css" />
@@ -10,18 +12,52 @@
     <title>Ecommerce Website</title>
   </head>
   <body>
-    <!--=============== HEADER ===============-->
-    <header>
-        <div class="left">
-          <a href="/index.html">
-            <h1>EShop</h1>
-          </a>
-          <ul class="tab-menu" id="tab-menu">
-            <li><a href="#">Shop</a></li>
-          </ul>
-        </div>
-       
-      </header>
+<!--=============== HEADER ===============-->
+<header>
+  <div class="left">
+    <a href="/index.html">
+      <h1>EShop</h1>
+    </a>
+    <ul class="tab-menu" id="tab-menu">
+      <li><a href="#">Shop</a></li>
+    </ul>
+  </div>
+  <div class="right">
+
+    <div class="auth" id="authSection">
+      <ul class="login-btns">
+        <!-- Logged In State -->
+        <li
+          class="login-btns-items"
+          id="logoutBtnContainer"
+          style="display: none"
+        ></li>
+        <!-- Logged Out State -->
+        <li class="login-btns-items">
+          <button
+            type="button"
+            class="btn"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+          >
+            Login
+          </button>
+        </li>
+        <!-- Button to trigger signup modal -->
+        <li class="login-btns-items">
+          <button
+            type="button"
+            class="btn"
+            data-bs-toggle="modal"
+            data-bs-target="#signupModal"
+          >
+            Sign up
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
 
 
     <!-- Address Section -->
