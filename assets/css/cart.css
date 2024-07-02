@@ -53,6 +53,32 @@ body {
   .cart-item-controls span {
     margin: 0 10px;
   }
+  .checkout {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  #address-selection {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  #checkout-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #checkout-button:hover {
+    background-color: #0056b3;
+  }
   
   @media (max-width: 1024px) {
     .cart-item {

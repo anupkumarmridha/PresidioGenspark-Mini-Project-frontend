@@ -24,7 +24,6 @@
         </ul>
       </div>
       <div class="right">
-
         <div class="auth" id="authSection">
           <ul class="login-btns">
             <!-- Logged In State -->
@@ -59,8 +58,18 @@
         </div>
       </div>
     </header>
-      <!--=============== CART ===============-->
-      <section class="cart" id="cart"></section>
+    <!--=============== CART ===============-->
+    <section class="cart" id="cart"></section>
+    <!-- Address Selection and Checkout Button -->
+    <section class="checkout">
+      <select id="address-selection">
+        <option value="" disabled selected>
+          Select Address
+        </option>
+        <!-- Options will be populated dynamically -->
+      </select>
+      <button id="checkout-button">Checkout</button>
+    </section>
     <!--=============== FOOTER ===============-->
     <footer class="footer"></footer>
   </body>
