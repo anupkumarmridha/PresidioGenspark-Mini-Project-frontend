@@ -340,7 +340,7 @@ function updateUI() {
     }
     if(isCustomer()) {
        tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="/cart.html">Cart</a>`;
-       tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="#">Orders</a>`;
+       tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="orders.html">Orders</a>`;
        tabMenu.appendChild(document.createElement('li')).innerHTML = `<a href="/address.html">Address</a>`;
     }
   } else {

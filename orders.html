@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Orders</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/orders.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="left">
+            <a href="/index.html">
+                <h1>EShop</h1>
+            </a>
+            <ul class="tab-menu" id="tab-menu">
+                <li><a href="#">Shop</a></li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="auth" id="authSection">
+                <ul class="login-btns">
+                    <li class="login-btns-items" id="logoutBtnContainer" style="display: none"></li>
+                    <li class="login-btns-items">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    </li>
+                    <li class="login-btns-items">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Orders Section -->
+    <section class="orders" id="orders"></section>
+
+    <!-- Confirm Cancel Modal -->
+    <div id="confirmCancelModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Are you sure you want to cancel this order?</p>
+            <button id="confirmCancelButton">Yes, Cancel</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer"></footer>
+
+    <script src="assets/js/orders.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
