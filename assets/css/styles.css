@@ -145,26 +145,35 @@ input{
 
 
 /* ===================Global Styles=============== */
+/* Apply box-sizing border-box to all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* General styles for header */
 header {
   width: 100%;
   display: flex;
+  flex-wrap: wrap; /* Allow elements to wrap */
   justify-content: space-between;
   align-items: center;
-  padding: 1rem; /* Increased padding for better spacing */
+  padding: 1rem;
   background-color: var(--first-color-alt);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Prevent overflow */
 }
 
 .left {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Added gap for spacing between items */
+  gap: 1rem;
 }
 
 .tab-menu {
   display: flex;
-  gap: 1.5rem; /* Increased gap for better spacing */
+  gap: 1.5rem;
   align-items: center;
   list-style: none;
   font-size: var(--normal-font-size);
@@ -174,7 +183,7 @@ header {
   text-decoration: none;
   color: var(--first-color);
   font-size: var(--h4-font-size);
-  transition: color 0.3s ease; /* Smooth transition for hover effect */
+  transition: color 0.3s ease;
 }
 
 .tab-menu a:hover {
@@ -185,21 +194,23 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap; /* Allow elements to wrap */
 }
 
 .search-filter {
   display: flex;
   gap: 1rem;
   align-items: center;
+  flex-wrap: wrap; /* Allow elements to wrap */
 }
 
 .search-filter input,
 .search-filter select {
-  padding: 0.5rem 1rem; /* Adjusted padding for better size */
+  padding: 0.5rem 1rem;
   font-size: var(--small-font-size);
   border: 1px solid var(--border-color);
-  border-radius: 4px; /* Added border-radius for rounded corners */
-  transition: transform 0.3s ease; /* Smooth transition for focus effect */
+  border-radius: 4px;
+  transition: transform 0.3s ease;
 }
 
 .search-filter input:focus,
@@ -209,10 +220,11 @@ header {
   border: 2px solid var(--border-color-alt);
 }
 
-.auth{
-  display: flex; /* Set the .auth section as a flex container */
-  justify-content: center; /* Horizontally center the buttons */
-  align-items: center; /* Vertically center the buttons */
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem; /* Adjusted gap for better spacing */
 }
 
 .auth .btn {
@@ -223,13 +235,12 @@ header {
   font-size: var(--small-font-size);
   border-radius: 4px;
   transition: background-color 0.3s ease;
-  width: 100%; /* Full width buttons */
+  width: 100%;
 }
 
 .auth .btn:hover {
   background-color: var(--btn-color-green);
 }
-
 
 /* Responsive styles */
 /* Responsive styles for screens up to 1024px */
@@ -251,27 +262,20 @@ header {
   }
 
   .right {
-    display: flex;
-    align-items: center;
+    width: 100%;
     gap: 1rem;
   }
 
   .search-filter {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
   }
 
   .search-filter input,
   .search-filter select {
-    width: calc(100% / 3 - 0.5rem); /* Distribute inputs evenly */
+    flex: 1 1 calc(33.333% - 0.5rem); /* Distribute inputs evenly */
   }
 
-  .auth{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   .auth .btn {
     width: 100%;
     font-size: smaller;
@@ -283,7 +287,7 @@ header {
   header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem 0.5rem; /* Adjusted padding for smaller screens */
+    padding: 1rem 0.5rem;
   }
 
   .left {
@@ -292,33 +296,34 @@ header {
   }
 
   .tab-menu {
-    flex-direction: column; /* Stacked menu items on smaller screens */
+    flex-direction: column;
     width: 100%;
     align-items: flex-start;
   }
 
   .right {
     width: 100%;
-    flex-direction: column; /* Stacked elements on smaller screens */
-    gap: 0.5rem; /* Adjusted gap for better spacing */
+    flex-direction: column;
+    gap: 0.5rem;
     margin-top: 1rem;
   }
 
   .search-filter {
     width: 100%;
-    flex-direction: column; /* Stacked input and select elements */
-    gap: 0.5rem; /* Adjusted gap for better spacing */
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .search-filter input,
   .search-filter select {
-    width: 100%; /* Full width inputs and selects */
+    width: 100%;
   }
 
   .auth .btn {
-    width: 100%; /* Full width buttons */
+    width: 100%;
   }
 }
+
 
 /* .product-card {
   animation: smooth 1s infinite;

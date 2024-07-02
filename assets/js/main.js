@@ -120,7 +120,8 @@ $(document).ready(function () {
     $('.add-to-cart-btn').on('click', function () {
         const productId = $(this).data('product-id');
         let quantity = document.getElementById(`quantity-${productId}`).value;
-        console.log(quantity);
+        quantity = parseInt(quantity);
+        console.log(productId, quantity);
         addToCart(productId, quantity);
     });
 };
@@ -262,6 +263,11 @@ function debounce(func, delay) {
 
   const addToCart = async (productId, quantity) => {
       try {
+        const bodyData = { 
+          "productId": productId,
+          "quantity": quantity
+        };
+        const userToken = localStorage.getItem('userToken');
           const response =  await fetch(`${baseUrl}/Cart`, {
             method: 'POST',
             headers: {
@@ -269,10 +275,15 @@ function debounce(func, delay) {
               'Accept': 'text/plain',
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ productId, quantity })
+            body: JSON.stringify(bodyData)
           });
 
+          if(!response.ok) {
+            console.log(response);
+            throw new Error('Failed to add product to cart');
+          }
           const data = await response.json();
+
           console.log('Product added to cart:', data);
           showToast("Product added to cart");
       } catch (error) {
