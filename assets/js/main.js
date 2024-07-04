@@ -121,7 +121,7 @@ $(document).ready(function () {
         const productId = $(this).data('product-id');
         let quantity = document.getElementById(`quantity-${productId}`).value;
         quantity = parseInt(quantity);
-        console.log(productId, quantity);
+        // console.log(productId, quantity);
         addToCart(productId, quantity);
     });
 };
@@ -280,7 +280,14 @@ function debounce(func, delay) {
 
           if(!response.ok) {
             console.log(response);
-            throw new Error('Failed to add product to cart');
+            if(response.status === 401) {
+              throw new Error('Please login to add product to cart');
+            }else if(response.status === 403) {
+              throw new Error('You are not authorized to add product to cart');
+            }
+            else{
+              throw new Error('Failed to add product to cart');
+            }
           }
           const data = await response.json();
 
@@ -288,7 +295,7 @@ function debounce(func, delay) {
           showToast("Product added to cart");
       } catch (error) {
           console.error('Error adding to cart:', error);
-          alert('Failed to add product to cart');
+          alert('Failed to add product to cart', error);
       }
   };
 

@@ -128,6 +128,7 @@ async function checkout() {
     const data = await response.json();
     console.log('Checkout successful:', data);
     alert('Checkout successful!');
+    displayCart([]);
   } catch (error) {
     console.error('Error during checkout:', error);
     alert('Checkout failed.');
