@@ -117,7 +117,7 @@ function validateAddForm(data) {
 }
 
 // Mapping function
-function mapProductFormData(formData) {
+function mapAddProductFormData(formData) {
     return {
         name: formData.productName,
         description: formData.productDescription,
@@ -128,18 +128,19 @@ function mapProductFormData(formData) {
     };
 }
 
+
 async function handleAddProductFormSubmit(event) {
     event.preventDefault();
     clearErrorMessages();
     const formData = getFormData('productForm');
-    console.log(formData);
+    // console.log(formData);
 
     if (!validateAddForm(formData)) {
         document.getElementById('productForm').classList.add('was-validated');
         return;
     }
 
-    const mappedData = mapProductFormData(formData);
+    const mappedData = mapAddProductFormData(formData);
 
     try {
         const response = await addProductAPI(mappedData, 'POST');
@@ -147,56 +148,12 @@ async function handleAddProductFormSubmit(event) {
         renderTable();
         resetForm('productForm');
         showToast('Product added successfully', 'success');
-    } catch (error) {
-        showToast(error.message, 'error');
-    }
-}
 
-function validateEditForm(data) {
-    let isValid = true;
-    const validations = [
-        { field: 'editproductName', errorField: 'editProductNameError', message: 'Product name is required' },
-        { field: 'editproductDescription', errorField: 'editProductDescriptionError', message: 'Description is required' },
-        { field: 'editproductCategory', errorField: 'editProductCategoryError', message: 'Category is required' },
-        { field: 'editproductPrice', errorField: 'editProductPriceError', message: 'Price is required', customValidation: value => parseFloat(value) > 0 },
-        { field: 'editproductQuantity', errorField: 'editProductQuantityError', message: 'Quantity is required', customValidation: value => parseInt(value) > 0 },
-    ];
+         // Close the modal
+         const modalElement = document.getElementById('productModal');
+         const modalInstance = bootstrap.Modal.getInstance(modalElement);
+         modalInstance.hide();
 
-    validations.forEach(({ field, errorField, message, customValidation }) => {
-        const value = data[field];
-        const inputElement = document.getElementById(field);
-        const errorElement = document.getElementById(errorField);
-
-        if (!value || (customValidation && !customValidation(value))) {
-            errorElement.textContent = message;
-            inputElement.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            errorElement.textContent = ''; // Clear error message if valid
-            inputElement.classList.remove('is-invalid');
-        }
-    });
-
-    return isValid;
-}
-
-async function handleEditProductFormSubmit(event) {
-    event.preventDefault();
-    clearErrorMessages();
-    const formData = getFormData('productEditForm');
-    const productId = formData.id; 
-    if (!validateEditForm(formData)) {
-        document.getElementById('productEditForm').classList.add('was-validated');
-        return;
-    }
-    const mappedData = mapProductFormData(formData);
-    try {
-        const response = await editProductAPI(mappedData, productId);
-        const editedProduct = products.find(p => p.id === formData.id);
-        Object.assign(editedProduct, response);
-        renderTable();
-        resetForm('productEditForm');
-        showToast('Product updated successfully', 'success');
     } catch (error) {
         showToast(error.message, 'error');
     }
@@ -226,8 +183,77 @@ async function addProductAPI(formData) {
 }
 
 
+function validateEditForm(data) {
+    let isValid = true;
+    const validations = [
+        { field: 'editproductName', errorField: 'editProductNameError', message: 'Product name is required' },
+        { field: 'editproductDescription', errorField: 'editProductDescriptionError', message: 'Description is required' },
+        { field: 'editproductCategory', errorField: 'editProductCategoryError', message: 'Category is required' },
+        { field: 'editproductPrice', errorField: 'editProductPriceError', message: 'Price is required', customValidation: value => parseFloat(value) > 0 },
+        { field: 'editproductQuantity', errorField: 'editProductQuantityError', message: 'Quantity is required', customValidation: value => parseInt(value) > 0 },
+    ];
+
+    validations.forEach(({ field, errorField, message, customValidation }) => {
+        const value = data[field];
+        const inputElement = document.getElementById(field);
+        const errorElement = document.getElementById(errorField);
+
+        if (!value || (customValidation && !customValidation(value))) {
+            errorElement.textContent = message;
+            inputElement.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            errorElement.textContent = ''; // Clear error message if valid
+            inputElement.classList.remove('is-invalid');
+        }
+    });
+
+    return isValid;
+}
+function mapEditProductFormData(formData) {
+    return {
+        name: formData.editproductName,
+        description: formData.editproductDescription,
+        quantity: parseInt(formData.editproductQuantity, 10),
+        price: parseFloat(formData.editproductPrice),
+        imageUrl: formData.editImageOption === 'url' ? formData.editProductImageUrl : '',
+        categoryName: formData.editproductCategory
+    };
+}
+async function handleEditProductFormSubmit(event) {
+    event.preventDefault();
+    clearErrorMessages();
+    const formData = getFormData('productEditForm');
+    const productId = formData.editproductId; 
+    console.log(formData);
+    if (!validateEditForm(formData)) {
+        document.getElementById('productEditForm').classList.add('was-validated');
+        return;
+    }
+    const mappedData = mapEditProductFormData(formData);
+    try {
+        const response = await editProductAPI(mappedData, productId);
+        const editedProduct = products.find(p => p.id === formData.id);
+        Object.assign(editedProduct, response);
+        renderTable();
+        resetForm('productEditForm');
+        showToast('Product updated successfully', 'success');
+
+         // Close the modal
+         const modalElement = document.getElementById('productEditModal');
+         const modalInstance = bootstrap.Modal.getInstance(modalElement);
+         modalInstance.hide();
+
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+}
+
+
+
 async function editProductAPI(formData, productId) {
     try {
+        console.log('formData:', formData, 'productId:', productId);
         const response = await fetch(`${baseUrl}/Product/${productId}`, {
             method: 'PUT',
             body: JSON.stringify(formData),
@@ -307,11 +333,14 @@ async function fetchProduct(productId) {
 }
 
 function populateModalFields(product, modalIdPrefix) {
+    // console.log(product);
+    document.getElementById(`${modalIdPrefix}productId`).value = product.productId;
     document.getElementById(`${modalIdPrefix}productName`).value = product.name;
     document.getElementById(`${modalIdPrefix}productDescription`).value = product.description;
     document.getElementById(`${modalIdPrefix}productCategory`).value = product.category.name;
     document.getElementById(`${modalIdPrefix}productPrice`).value = product.price;
     document.getElementById(`${modalIdPrefix}productQuantity`).value = product.quantity;
+    document.getElementById(`${modalIdPrefix}ProductImageUrl`).value = product.imageUrl;
 }
 
 async function editProduct(productId) {
