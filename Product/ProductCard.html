@@ -1,27 +1,35 @@
 <div class="product-card">
-    <img src="{thumbnail}" alt="{title}">
-    <h2>{title}</h2>
-    <p>{description}</p>
-    <div class="details">
-        <div>Category: {category}</div>
-    </div>
-    <div class="price">Price: ${price}</div>
-    <div class="rating {ratingClass}">Rating: {rating}</div>
-    <div class="stock {stockClass}">{availabilityStatus}</div>
-    <div class="reviews-summary">Reviews: {reviewsCount} (Avg. Rating: {averageRating})</div>
+    <div class="image-container">
+        <a href="/Product/product-details.html?id={id}" class="title-link">
+            <img src="{thumbnail}" alt="{title}">
 
-    <!-- Quantity Selector -->
-    <div class="quantity-selector">
-        <label for="quantity-{id}">Quantity:</label>
-        <input type="number" id="quantity-{id}" name="quantity" min="1" value="1">
+        </a>
     </div>
-
-    <!-- Action Buttons -->
+    <div class="content">
+        <a href="/Product/product-details.html?id={id}" class="title-link">
+            <h2>{title}</h2>
+        </a>
+        <p>{description}</p>
+        <div class="details">
+            <div>Category: {category}</div>
+        </div>
+        <div class="price">Price: ${price}</div>
+        <div class="rating {ratingClass}">Rating: {rating}</div>
+        <div class="stock {stockClass}">{availabilityStatus}</div>
+        <div class="reviews-summary">Reviews: {reviewsCount} (Avg. Rating: {averageRating})</div>
+        <div class="quantity-selector">
+            <label for="quantity-{id}">Quantity:</label>
+            <input type="number" id="quantity-{id}" name="quantity" min="1" value="1">
+        </div>
+    </div>
     <div class="action-buttons">
         <button class="btn add-to-cart-btn" data-product-id="{id}">Add to Cart</button>
         <button class="btn buy-now-btn" data-product-id="{id}">Buy Now</button>
     </div>
 </div>
+
+
+
 <!-- 
     <div class="product-card">
         <img src="{thumbnail}" alt="{title}">
