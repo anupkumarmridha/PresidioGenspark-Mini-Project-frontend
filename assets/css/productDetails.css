@@ -2,85 +2,273 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
 }
 
 .product-details-container {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 20px;
-}
-
-.product-image {
-    flex: 1;
-    max-width: 400px;
-    margin-right: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
 }
 
 .product-image img {
     width: 100%;
-    height: auto;
+    border-radius: 10px;
 }
 
 .product-info {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
+    margin-top: 20px;
+    width: 100%;
 }
 
 .product-info h1 {
-    margin-top: 0;
+    margin: 0;
+    font-size: 2em;
+    color: #333;
 }
 
-.category, .price, .rating, .stock, .reviews-summary {
-    margin-bottom: 10px;
+.product-info p {
+    color: #555;
+}
+
+.product-info .category,
+.product-info .price,
+.product-info .rating,
+.product-info .stock,
+.product-info .reviews-summary {
+    margin-top: 10px;
+    color: #777;
 }
 
 .quantity-selector {
-    margin: 20px 0;
+    margin-top: 20px;
+}
+
+.quantity-selector label {
+    margin-right: 10px;
 }
 
 .action-buttons {
+    margin-top: 20px;
     display: flex;
     gap: 10px;
 }
 
-.action-buttons .btn {
+.btn {
     padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 1em;
+    color: white;
+    transition: background-color 0.3s ease;
 }
 
-.action-buttons .btn:hover {
-    background-color: #0056b3;
+.btn-warning {
+    background-color: #f0ad4e;
+}
+
+.btn-warning:hover {
+    background-color: #ec971f;
+}
+
+.btn-success {
+    background-color: #5cb85c;
+}
+
+.btn-success:hover {
+    background-color: #4cae4c;
+}
+
+.btn-primary {
+    background-color: #0275d8;
+}
+
+.btn-primary:hover {
+    background-color: #025aa5;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+}
+
+.btn-danger:hover {
+    background-color: #c9302c;
 }
 
 .product-reviews {
     margin-top: 40px;
+    width: 100%;
 }
 
 .product-reviews h2 {
     margin-bottom: 20px;
+    color: #333;
 }
 
 .review-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
 }
 
 .review {
-    border: 1px solid #ccc;
-    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.review .review-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.review .review-actions {
+    gap: 5px;
+}
+
+.review-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fafafa;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.review-rating {
-    font-weight: bold;
+.review-form h3 {
+    margin: 0 0 10px;
+    color: #333;
 }
 
-.review-date {
-    font-size: 0.9em;
-    color: #666;
+.review-form label {
+    display: block;
+    margin: 10px 0 5px;
 }
+
+.review-form input,
+.review-form textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 0 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.review-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+@media (min-width: 768px) {
+    .product-details-container {
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+    }
+
+    .product-image {
+        grid-column: 1 / 2;
+    }
+
+    .product-info {
+        grid-column: 2 / 3;
+        margin-top: 0;
+    }
+
+    .product-reviews {
+        grid-column: 1 / 3;
+    }
+}
+
+
+/* Toast Styles */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: rgb(4, 100, 4); /* Default background color for success */
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 30px;
+    bottom: 30px;
+    font-size: 17px;
+  }
+  
+  .toast.error {
+    background-color: rgb(186, 93, 93); /* Background color for error */
+  }
+  
+  .toast.show {
+    z-index: 999999;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  .toast .close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: rgb(247, 233, 233);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  @-webkit-keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+  
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+  
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+  
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+  
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }

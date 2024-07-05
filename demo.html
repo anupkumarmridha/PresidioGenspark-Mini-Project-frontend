@@ -1,0 +1,285 @@
+
+<script src="../assets/js/main.js"></script>
+<header>
+    <div class="left">
+      <a href="/index.html">
+        <h1>EShop</h1>
+      </a>
+      <ul class="tab-menu" id="tab-menu">
+        <li><a href="#">Shop</a></li>
+      </ul>
+    </div>
+    <div class="right">
+      <div class="auth" id="authSection">
+        <ul class="login-btns">
+          <!-- Logged In State -->
+          <li
+            class="login-btns-items"
+            id="logoutBtnContainer"
+            style="display: none"
+          ></li>
+          <!-- Logged Out State -->
+          <li class="login-btns-items">
+            <button
+              type="button"
+              class="btn"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              Login
+            </button>
+          </li>
+          <!-- Button to trigger signup modal -->
+          <li class="login-btns-items">
+            <button
+              type="button"
+              class="btn"
+              data-bs-toggle="modal"
+              data-bs-target="#signupModal"
+            >
+              Sign up
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+      <!-- ================footer================= -->
+      <footer>
+        <div class="footer-content">
+          <div class="footer-section about">
+            <h1 class="logo-text">EShop</h1>
+            <p>
+              EShop is an online shopping platform where you can buy a variety of
+              products from different categories.
+            </p>
+            <div class="contact">
+              <span><i class="fas fa-phone"></i> &nbsp; +91-123-456-789</span>
+              <span><i class="fas fa-envelope"></i> &nbsp;</span>
+            </div>
+            <!-- <div class="socials">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+              </div> -->
+          </div>
+          <div class="footer-section links">
+            <h2>Quick Links</h2>
+            <ul>
+              <a href="#"><li>Events</li></a>
+              <a href="#"><li>Team</li></a>
+              <a href="#"><li>Mentors</li></a>
+              <a href="#"><li>Gallery</li></a>
+            </ul>
+          </div>
+          <div class="footer-section contact-form">
+            <h2>Contact Us</h2>
+            <form action="index.html" method="post">
+              <input
+                type="email"
+                name="email"
+                class="text-input contact-input"
+                placeholder="Your email address..."
+              />
+              <textarea
+                name="message"
+                class="text-input contact-input"
+                placeholder="Your message..."
+              ></textarea>
+              <button type="submit" class="btn btn-big contact-btn">
+                <i class="fas fa-envelope"></i>
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="footer-bottom">&copy; EShop | Designed by Group 1</div>
+      </footer>
+      <!-- ================End Footer=============== -->
+  
+
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+    
+            fetch(`http://localhost:5062/api/Product/${productId}`)
+                .then(response => response.json())
+                .then(product => {
+                    document.getElementById('product-image').src = product.imageUrl;
+                    document.getElementById('product-image').alt = product.name;
+                    document.getElementById('product-name').textContent = product.name;
+                    document.getElementById('product-description').textContent = product.description;
+                    document.getElementById('product-category').textContent = product.category.name;
+                    document.getElementById('product-price').textContent = product.price;
+                    document.getElementById('product-rating').textContent = `Rating: ${product.rating}`;
+                    document.getElementById('product-stock').textContent = product.quantity > 0 ? 'In Stock' : 'Out of Stock';
+    
+                    const reviews = product.reviews || [];
+                    document.getElementById('product-reviews-count').textContent = reviews.length;
+                    document.getElementById('product-average-rating').textContent = reviews.length > 0 ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1) : 'N/A';
+    
+                    const reviewList = document.getElementById('review-list');
+                    reviewList.innerHTML = reviews.map(review => `
+                        <div class="review" data-review-id="${review.reviewId}">
+                            <div class="review-details">
+                                <div class="review-rating">Rating: ${review.rating}</div>
+                                <p class="review-comment">${review.comment}</p>
+                                <div class="review-date">Reviewed on: ${new Date(review.createdDate).toLocaleDateString()}</div>
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn edit-review-btn" onclick="editReview(${review.reviewId})">Edit</button>
+                                <button class="btn delete-review-btn" onclick="deleteReview(${review.reviewId})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+    
+                    document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+                        addToCart(product.productId, document.getElementById('quantity').value);
+                    });
+    
+                    document.getElementById('buy-now-btn').addEventListener('click', () => {
+                        buyNow(product.productId, document.getElementById('quantity').value);
+                    });
+    
+                    document.getElementById('submit-review-btn').addEventListener('click', () => {
+                        addReview(product.productId);
+                    });
+                })
+                .catch(error => console.error('Error fetching product data:', error));
+        });
+
+        const userToken = localStorage.getItem('userToken');
+        const userId = localStorage.getItem('userId'); // Assuming you store the user's ID in local storage
+        
+        const fetchProductDetails = async (productId) => {
+            try {
+                const response = await fetch(`http://localhost:5062/api/Product/${productId}`);
+                const product = await response.json();
+                displayProductDetails(product);
+            } catch (error) {
+                console.error('Error fetching product data:', error);
+            }
+        };
+        const displayProductDetails = (product) => {
+            document.getElementById('product-image').src = product.imageUrl;
+            document.getElementById('product-image').alt = product.name;
+            document.getElementById('product-name').textContent = product.name;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('product-category').textContent = product.category.name;
+            document.getElementById('product-price').textContent = product.price;
+            document.getElementById('product-rating').textContent = `Rating: ${product.rating}`;
+            document.getElementById('product-stock').textContent = product.quantity > 0 ? 'In Stock' : 'Out of Stock';
+
+            const reviews = product.reviews || [];
+            document.getElementById('product-reviews-count').textContent = reviews.length;
+            document.getElementById('product-average-rating').textContent = reviews.length > 0 ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1) : 'N/A';
+
+            const reviewList = document.getElementById('review-list');
+            reviewList.innerHTML = reviews.map(review => `
+                <div class="review" data-review-id="${review.reviewId}">
+                    <div class="review-details">
+                        <div class="review-rating">Rating: ${review.rating}</div>
+                        <p class="review-comment">${review.comment}</p>
+                        <div class="review-date">Reviewed on: ${new Date(review.createdDate).toLocaleDateString()}</div>
+                    </div>
+                    ${review.userId === userId ? `
+                    <div class="review-actions">
+                        <button class="btn edit-review-btn" onclick="openEditModal(${review.reviewId})">Edit</button>
+                        <button class="btn delete-review-btn" onclick="deleteReview(${review.reviewId})">Delete</button>
+                    </div>` : ''}
+                </div>
+            `).join('');
+
+            document.getElementById('add-to-cart-btn').addEventListener('click', () => addToCart(product.productId));
+            document.getElementById('buy-now-btn').addEventListener('click', () => buyNow(product.productId));
+            document.getElementById('submit-review-btn').addEventListener('click', () => addReview(product.productId));
+        };
+
+        const userToken = localStorage.getItem('userToken');
+    
+        const addToCart = async (productId) => {
+            try {
+                const quantity = document.getElementById('quantity').value;
+                console.log(`Adding product ${productId} with quantity ${quantity} to cart`);
+                // Your add to cart logic here
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+            }
+        };
+    
+        const buyNow = async (productId) => {
+            try {
+                const quantity = document.getElementById('quantity').value;
+                console.log(`Buying product ${productId} with quantity ${quantity}`);
+                // Your buy now logic here
+            } catch (error) {
+                console.error('Error buying product:', error);
+            }
+        };
+    
+        function addReview(productId) {
+            const rating = document.getElementById('review-rating').value;
+            const comment = document.getElementById('review-comment').value;
+    
+            fetch('http://localhost:5062/api/Reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': 'text/plain',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({ productId, rating, comment })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Review added:', data);
+                // Refresh the page or update the review list dynamically
+            })
+            .catch(error => console.error('Error adding review:', error));
+        }
+    
+        function editReview(reviewId) {
+            const rating = prompt("Enter new rating:");
+            const comment = prompt("Enter new comment:");
+    
+            fetch(`http://localhost:5062/api/Reviews/${reviewId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': 'text/plain',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({ productId: 0, rating, comment }) // Adjust as needed
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Review updated:', data);
+                // Refresh the page or update the review list dynamically
+            })
+            .catch(error => console.error('Error updating review:', error));
+        }
+    
+        function deleteReview(reviewId) {
+            fetch(`http://localhost:5062/api/Reviews/${reviewId}`, {
+                method: 'DELETE',
+                headers: {
+                    'accept': '*/*',
+                    'Authorization': `Bearer ${userToken}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Review deleted');
+                    // Refresh the page or update the review list dynamically
+                } else {
+                    console.error('Error deleting review:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Error deleting review:', error));
+        }
+    </script>

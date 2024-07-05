@@ -4,73 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details</title>
-    <link rel="stylesheet" href="/assets/css/productDetails.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/productDetails.css">
 </head>
 <body>
     <div class="product-details-container">
         <div class="product-image">
-            <img src="{imageUrl}" alt="{name}">
+            <img id="product-image" src="" alt="">
         </div>
         <div class="product-info">
-            <h1>{name}</h1>
-            <p>{description}</p>
-            <div class="category">Category: {category.name}</div>
-            <div class="price">Price: ${price}</div>
-            <div class="rating {ratingClass}">Rating: {rating}</div>
-            <div class="stock {stockClass}">{availabilityStatus}</div>
-            <div class="reviews-summary">Reviews: {reviews.length} (Avg. Rating: {averageRating})</div>
+            <h1 id="product-name"></h1>
+            <p id="product-description"></p>
+            <div class="category">Category: <span id="product-category"></span></div>
+            <div class="price">Price: $<span id="product-price"></span></div>
+            <div class="rating" id="product-rating"></div>
+            <div class="stock" id="product-stock"></div>
+            <div class="reviews-summary">Reviews: <span id="product-reviews-count"></span> (Avg. Rating: <span id="product-average-rating"></span>)</div>
 
             <!-- Quantity Selector -->
             <div class="quantity-selector">
-                <label for="quantity-{productId}">Quantity:</label>
-                <input type="number" id="quantity-{productId}" name="quantity" min="1" value="1">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1">
             </div>
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button class="btn add-to-cart-btn" data-product-id="{productId}">Add to Cart</button>
-                <button class="btn buy-now-btn" data-product-id="{productId}">Buy Now</button>
+                <button class="btn btn-warning btn-sm" id="add-to-cart-btn">Add to Cart</button>
+                <button class="btn btn-success btn-sm" id="buy-now-btn">Buy Now</button>
             </div>
         </div>
         <div class="product-reviews">
             <h2>Customer Reviews</h2>
-            <div class="review-list">
-                {reviews.map(review => `
-                    <div class="review">
-                        <div class="review-rating">Rating: ${review.rating}</div>
-                        <p class="review-comment">${review.comment}</p>
-                        <div class="review-date">Reviewed on: ${new Date(review.createdDate).toLocaleDateString()}</div>
-                    </div>
-                `).join('')}
+            <div class="review-list" id="review-list"></div>
+
+            <div class="review-form">
+                <h3>Add a Review</h3>
+                <label for="review-rating">Rating:</label>
+                <input type="number" id="review-rating" name="review-rating" min="1" max="5">
+                <label for="review-comment">Comment:</label>
+                <textarea id="review-comment" name="review-comment"></textarea>
+                <button class="btn btn-primary btn-sm" id="submit-review-btn">Submit Review</button>
             </div>
         </div>
     </div>
 
-   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('.add-to-cart-btn').addEventListener('click', function () {
-            const productId = this.dataset.productId;
-            const quantity = document.getElementById(`quantity-${productId}`).value;
-            addToCart(productId, quantity);
-        });
-    
-        document.querySelector('.buy-now-btn').addEventListener('click', function () {
-            const productId = this.dataset.productId;
-            const quantity = document.getElementById(`quantity-${productId}`).value;
-            buyNow(productId, quantity);
-        });
-    });
-    
-    function addToCart(productId, quantity) {
-        console.log(`Adding product ${productId} with quantity ${quantity} to cart`);
-        // Your add to cart logic here
-    }
-    
-    function buyNow(productId, quantity) {
-        console.log(`Buying product ${productId} with quantity ${quantity}`);
-        // Your buy now logic here
-    }
-    
-   </script>
+    <!-- Edit Review Modal -->
+    <div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editReviewModalLabel">Edit Review</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-review-form">
+                        <div class="form-group">
+                            <label for="edit-review-rating">Rating:</label>
+                            <input type="number" class="form-control" id="edit-review-rating" min="1" max="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-review-comment">Comment:</label>
+                            <textarea class="form-control" id="edit-review-comment" rows="4"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-review-btn">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toast" class="toast">
+        <span class="close">&times;</span>
+      </div>
+<script src="../assets/js/product-details.js"></script>
 </body>
 </html>

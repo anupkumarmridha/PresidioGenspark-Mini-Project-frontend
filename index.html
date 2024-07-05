@@ -436,11 +436,12 @@
               return response.json();
             })
             .then((data) => {
-              const { role, token } = data;
+              const { role, token, id } = data;
 
               // Store role and token in localStorage
               localStorage.setItem("userRole", role);
               localStorage.setItem("userToken", token);
+              localStorage.setItem("userId", id);
 
               // Optionally, you can redirect the user or update UI after successful login
               console.log("Login successful:", data);
