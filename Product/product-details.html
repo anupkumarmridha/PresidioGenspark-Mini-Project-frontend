@@ -9,8 +9,72 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../assets/css/productDetails.css">
+
+       <!--=============== CSS ===============-->
+       <link rel="stylesheet" href="../assets/css/styles.css" />
+       <!--=============== JS ===============-->
+       <script src="../assets/js/main.js"></script>
 </head>
 <body>
+    <header>
+        <div class="left">
+          <a href="/index.html">
+            <h1>EShop</h1>
+          </a>
+          <ul class="tab-menu" id="tab-menu">
+            <li><a href="#">Shop</a></li>
+          </ul>
+        </div>
+        <div class="right">
+          <div class="search-filter">
+            <input type="text" id="search-bar" placeholder="Search products..." />
+            <select id="category-filter">
+              <option value="all">All Categories</option>
+              <!-- Add more categories as needed -->
+            </select>
+            <select id="rating-filter">
+              <option value="all">All Ratings</option>
+              <option value="high">4.5 and above</option>
+              <option value="medium">3.5 to 4.49</option>
+              <option value="low">Below 3.5</option>
+            </select>
+            <input type="number" id="min-price" placeholder="Min Price" min="0">
+              <input type="number" id="max-price" placeholder="Max Price" min="0">
+          </div>
+          <div class="auth" id="authSection">
+            <ul class="login-btns">
+              <!-- Logged In State -->
+              <li
+                class="login-btns-items"
+                id="logoutBtnContainer"
+                style="display: none"
+              ></li>
+              <!-- Logged Out State -->
+              <li class="login-btns-items">
+                <button
+                  type="button"
+                  class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginModal"
+                >
+                  Login
+                </button>
+              </li>
+              <!-- Button to trigger signup modal -->
+              <li class="login-btns-items">
+                <button
+                  type="button"
+                  class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#signupModal"
+                >
+                  Sign up
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
     <div class="product-details-container">
         <div class="product-image">
             <img id="product-image" src="" alt="">

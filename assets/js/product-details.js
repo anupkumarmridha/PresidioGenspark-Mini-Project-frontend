@@ -7,10 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const userToken = localStorage.getItem('userToken');
 const userId = localStorage.getItem('userId'); 
+const baseUrl = 'http://localhost:5062/api';
 
 const fetchProductDetails = async (productId) => {
     try {
-        const response = await fetch(`http://localhost:5062/api/Product/${productId}`);
+        const response = await fetch(`${baseUrl}/Product/${productId}`);
         const product = await response.json();
         displayProductDetails(product);
     } catch (error) {
@@ -64,7 +65,36 @@ const createReviewHTML = (review) => {
 const addToCart = async (productId) => {
     try {
         const quantity = document.getElementById('quantity').value;
-        console.log(`Adding product ${productId} with quantity ${quantity} to cart`);
+        const bodyData = { 
+            "productId": productId,
+            "quantity": quantity
+          };
+          const userToken = localStorage.getItem('userToken');
+          const response =  await fetch(`${baseUrl}/Cart`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${userToken}`,
+              'Accept': 'text/plain',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodyData)
+          });
+
+          if(!response.ok) {
+            console.log(response);
+            if(response.status === 401) {
+              throw new Error('Please login to add product to cart');
+            }else if(response.status === 403) {
+              throw new Error('You are not authorized to add product to cart');
+            }
+            else{
+              throw new Error('Failed to add product to cart');
+            }
+          }
+          const data = await response.json();
+
+          console.log('Product added to cart:', data);
+          showToast("Product added to cart", "success");
         // Your add to cart logic here
     } catch (error) {
         console.error('Error adding to cart:', error);
@@ -88,7 +118,7 @@ const addReview = async (productId) => {
         const rating = document.getElementById('review-rating').value;
         const comment = document.getElementById('review-comment').value;
 
-        const response = await fetch('http://localhost:5062/api/Reviews', {
+        const response = await fetch(`${baseUrl}/Reviews`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -141,7 +171,7 @@ const editReview = async (reviewId) => {
         const rating = document.getElementById('edit-review-rating').value;
         const comment = document.getElementById('edit-review-comment').value;
 
-        const response = await fetch(`http://localhost:5062/api/Reviews/${reviewId}`, {
+        const response = await fetch(`${baseUrl}/Reviews/${reviewId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +200,7 @@ const editReview = async (reviewId) => {
 
 const deleteReview = async (reviewId) => {
     try {
-        const response = await fetch(`http://localhost:5062/api/Reviews/${reviewId}`, {
+        const response = await fetch(`${baseUrl}/Reviews/${reviewId}`, {
             method: 'DELETE',
             headers: {
                 'accept': '*/*',
