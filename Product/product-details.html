@@ -26,21 +26,6 @@
           </ul>
         </div>
         <div class="right">
-          <div class="search-filter">
-            <input type="text" id="search-bar" placeholder="Search products..." />
-            <select id="category-filter">
-              <option value="all">All Categories</option>
-              <!-- Add more categories as needed -->
-            </select>
-            <select id="rating-filter">
-              <option value="all">All Ratings</option>
-              <option value="high">4.5 and above</option>
-              <option value="medium">3.5 to 4.49</option>
-              <option value="low">Below 3.5</option>
-            </select>
-            <input type="number" id="min-price" placeholder="Min Price" min="0">
-              <input type="number" id="max-price" placeholder="Max Price" min="0">
-          </div>
           <div class="auth" id="authSection">
             <ul class="login-btns">
               <!-- Logged In State -->
@@ -147,6 +132,58 @@
     <div id="toast" class="toast">
         <span class="close">&times;</span>
       </div>
+
+      <footer>
+        <div class="footer-content">
+          <div class="footer-section about">
+            <h1 class="logo-text">EShop</h1>
+            <p>
+              EShop is an online shopping platform where you can buy a variety of
+              products from different categories.
+            </p>
+            <div class="contact">
+              <span><i class="fas fa-phone"></i> &nbsp; +91-123-456-789</span>
+              <span><i class="fas fa-envelope"></i> &nbsp;</span>
+            </div>
+            <div class="socials">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-section links">
+            <h2>Quick Links</h2>
+            <ul>
+              <a href="#"><li>Events</li></a>
+              <a href="#"><li>Team</li></a>
+              <a href="#"><li>Mentors</li></a>
+              <a href="#"><li>Gallery</li></a>
+            </ul>
+          </div>
+          <div class="footer-section contact-form">
+            <h2>Contact Us</h2>
+            <form action="index.html" method="post">
+              <input
+                type="email"
+                name="email"
+                class="text-input contact-input"
+                placeholder="Your email address..."
+              />
+              <textarea
+                name="message"
+                class="text-input contact-input"
+                placeholder="Your message..."
+              ></textarea>
+              <button type="submit" class="btn btn-big contact-btn">
+                <i class="fas fa-envelope"></i>
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="footer-bottom">&copy; EShop | Designed by Group 1</div>
+      </footer>
 <script src="../assets/js/product-details.js"></script>
 </body>
 </html>
