@@ -92,6 +92,55 @@ $(document).ready(function () {
   //     });
   // };
 
+  const fetchAddresses = async () => {
+    try {
+        const response = await fetch(`${baseUrl}/Address`, {
+            headers: {
+                'accept': 'text/plain',
+                'Authorization': 'Bearer ' + localStorage.getItem('userToken')
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch addresses');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching addresses:', error);
+        return [];
+    }
+};
+
+const placeOrder = async (productId, addressId, quantity) => {
+  try {
+    console.log(productId, addressId, quantity);
+      const response = await fetch(`${baseUrl}/Order`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'accept': 'text/plain',
+              'Authorization': 'Bearer ' + localStorage.getItem('userToken'),
+          },
+          body: JSON.stringify({
+            productId: productId,
+            addressId: addressId,
+            quantity: quantity,
+          }),
+        });
+
+      if (response.ok) {
+          // alert('Order placed successfully!');
+          showToast("Order placed successfully!");
+      } else {
+          alert('Failed to place order.');
+      }
+  } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order.');
+  }
+};
+
+
+
   const displayProducts = async (productArray) => {
     const template = await fetchTemplate('Product/ProductCard.html');
     productList.empty();
@@ -124,7 +173,40 @@ $(document).ready(function () {
         // console.log(productId, quantity);
         addToCart(productId, quantity);
     });
+
+    $('.buy-now-btn').on('click', async function () {
+      const productId = $(this).data('product-id');
+      let quantity = document.getElementById(`quantity-${productId}`).value;
+      quantity = parseInt(quantity);
+  
+      const addresses = await fetchAddresses();
+      const addressDropdown = $('#addressDropdown');
+      addressDropdown.empty();
+      addresses.forEach(address => {
+          const addressText = `${address.street}, ${address.city}, ${address.state}, ${address.zipCode}, ${address.country}`;
+          addressDropdown.append(new Option(addressText, address.addressId));
+      });
+  
+      $('#addressModal').modal('show');
+  
+      $('#confirmAddressBtn').off('click').on('click', async function () {
+          const addressId = $('#addressDropdown').val();
+          console.log("Address ID: ", addressId);
+          if (addressId) {
+              await placeOrder(productId, addressId, quantity);
+              $('#addressModal').modal('hide');
+          } else {
+              alert('Please select an address.');
+          }
+      });
+  });
+  
+  
+  
+
+
 };
+
 
 
   const setupPagination = (productArray) => {

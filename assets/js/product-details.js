@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const userToken = localStorage.getItem('userToken');
-const userId = localStorage.getItem('userId'); 
+const userId = localStorage.getItem('userId');
 const baseUrl = 'http://localhost:5062/api';
 
 const fetchProductDetails = async (productId) => {
@@ -30,7 +30,7 @@ const displayProductDetails = (product) => {
     document.getElementById('product-rating').textContent = `Rating: ${(
         product.reviews.reduce((acc, review) => acc + review.rating, 0) /
         product.reviews.length
-      ).toFixed(1)}`;
+    ).toFixed(1)}`;
     document.getElementById('product-stock').textContent = product.quantity > 0 ? 'In Stock' : 'Out of Stock';
 
     const reviews = product.reviews || [];
@@ -65,36 +65,36 @@ const createReviewHTML = (review) => {
 const addToCart = async (productId) => {
     try {
         const quantity = document.getElementById('quantity').value;
-        const bodyData = { 
+        const bodyData = {
             "productId": productId,
             "quantity": quantity
-          };
-          const userToken = localStorage.getItem('userToken');
-          const response =  await fetch(`${baseUrl}/Cart`, {
+        };
+        const userToken = localStorage.getItem('userToken');
+        const response = await fetch(`${baseUrl}/Cart`, {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${userToken}`,
-              'Accept': 'text/plain',
-              'Content-Type': 'application/json'
+                'Authorization': `Bearer ${userToken}`,
+                'Accept': 'text/plain',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(bodyData)
-          });
+        });
 
-          if(!response.ok) {
+        if (!response.ok) {
             console.log(response);
-            if(response.status === 401) {
-              throw new Error('Please login to add product to cart');
-            }else if(response.status === 403) {
-              throw new Error('You are not authorized to add product to cart');
+            if (response.status === 401) {
+                throw new Error('Please login to add product to cart');
+            } else if (response.status === 403) {
+                throw new Error('You are not authorized to add product to cart');
             }
-            else{
-              throw new Error('Failed to add product to cart');
+            else {
+                throw new Error('Failed to add product to cart');
             }
-          }
-          const data = await response.json();
+        }
+        const data = await response.json();
 
-          console.log('Product added to cart:', data);
-          showToast("Product added to cart", "success");
+        console.log('Product added to cart:', data);
+        showToast("Product added to cart", "success");
         // Your add to cart logic here
     } catch (error) {
         console.error('Error adding to cart:', error);
@@ -102,11 +102,78 @@ const addToCart = async (productId) => {
     }
 };
 
+const fetchAddresses = async () => {
+    try {
+        const response = await fetch(`${baseUrl}/Address`, {
+            headers: {
+                'accept': 'text/plain',
+                'Authorization': 'Bearer ' + localStorage.getItem('userToken')
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch addresses');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching addresses:', error);
+        return [];
+    }
+};
+
+const placeOrder = async (productId, addressId, quantity) => {
+    try {
+      console.log(productId, addressId, quantity);
+        const response = await fetch(`${baseUrl}/Order`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': 'text/plain',
+                'Authorization': 'Bearer ' + localStorage.getItem('userToken'),
+            },
+            body: JSON.stringify({
+              productId: productId,
+              addressId: addressId,
+              quantity: quantity,
+            }),
+          });
+  
+        if (response.ok) {
+            // alert('Order placed successfully!');
+            showToast("Order placed successfully!", "success");
+        } else {
+            alert('Failed to place order.');
+        }
+    } catch (error) {
+        console.error('Error placing order:', error);
+        alert('Failed to place order.');
+    }
+  };
+
 const buyNow = async (productId) => {
     try {
-        const quantity = document.getElementById('quantity').value;
-        console.log(`Buying product ${productId} with quantity ${quantity}`);
-        // Your buy now logic here
+        let quantity = document.getElementById('quantity').value;
+        quantity = parseInt(quantity);
+
+        const addresses = await fetchAddresses();
+        const addressDropdown = $('#addressDropdown');
+        addressDropdown.empty();
+        addresses.forEach(address => {
+            const addressText = `${address.street}, ${address.city}, ${address.state}, ${address.zipCode}, ${address.country}`;
+            addressDropdown.append(new Option(addressText, address.addressId));
+        });
+
+        $('#addressModal').modal('show');
+
+        $('#confirmAddressBtn').off('click').on('click', async function () {
+            const addressId = $('#addressDropdown').val();
+            console.log("Address ID: ", addressId);
+            if (addressId) {
+                await placeOrder(productId, addressId, quantity);
+                $('#addressModal').modal('hide');
+            } else {
+                alert('Please select an address.');
+            }
+        });
     } catch (error) {
         console.error('Error buying product:', error);
         showToast("Error buying product", "error");
@@ -184,7 +251,7 @@ const editReview = async (reviewId) => {
         const data = await response.json();
         console.log('Review updated:', data);
         showToast("Review updated", "success");
-        
+
         // Update the review in the DOM
         const review = document.querySelector(`.review[data-review-id="${reviewId}"]`);
         review.querySelector('.review-rating').textContent = `Rating: ${rating}`;
@@ -232,8 +299,8 @@ const updateReviewSummary = () => {
     const reviewList = document.getElementById('review-list');
     const reviews = Array.from(reviewList.getElementsByClassName('review'));
     const reviewCount = reviews.length;
-    const averageRating = reviews.length > 0 ? 
-        (reviews.reduce((acc, review) => acc + parseInt(review.querySelector('.review-rating').textContent.replace('Rating: ', '')), 0) / reviews.length).toFixed(1) 
+    const averageRating = reviews.length > 0 ?
+        (reviews.reduce((acc, review) => acc + parseInt(review.querySelector('.review-rating').textContent.replace('Rating: ', '')), 0) / reviews.length).toFixed(1)
         : 'N/A';
 
     document.getElementById('product-reviews-count').textContent = reviewCount;
@@ -247,26 +314,26 @@ const showToast = (message, status) => {
     // Determine background color based on status
     let backgroundColor;
     switch (status) {
-      case "success":
-        backgroundColor = "rgb(4, 100, 4)";
-        break;
-      case "error":
-        backgroundColor = "rgb(186, 93, 93)";
-        break;
-      default:
-        backgroundColor = "rgb(4, 100, 4)"; // Default to success color
-        break;
+        case "success":
+            backgroundColor = "rgb(4, 100, 4)";
+            break;
+        case "error":
+            backgroundColor = "rgb(186, 93, 93)";
+            break;
+        default:
+            backgroundColor = "rgb(4, 100, 4)"; // Default to success color
+            break;
     }
 
     toast.style.backgroundColor = backgroundColor;
     toast.innerHTML = `<span class="close">&times;</span> ${message}`;
 
     setTimeout(function () {
-      toast.className = toast.className.replace("show", "");
+        toast.className = toast.className.replace("show", "");
     }, 3000);
 
     const closeButton = document.querySelector(".toast .close");
     closeButton.onclick = function () {
-      toast.style.visibility = "hidden";
+        toast.style.visibility = "hidden";
     };
-  };
+};
